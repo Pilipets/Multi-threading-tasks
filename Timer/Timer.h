@@ -11,12 +11,11 @@ namespace time_measuring {
 			TIMER_EXPIRED,
 			SIGNAL_RECEIVED
 		};
-		void SetTimeout(const std::chrono::milliseconds & ms, std::function<void(TimeOutReason)> callBack);
+		void SetTimeout(const std::chrono::milliseconds & ms, std::function<void (void)> callBack);
 		void StopTimer();
 	private:
 		std::mutex timerMutex;
 		std::condition_variable condTimer;
-		std::cv_status retStatus;
 		std::thread timeoutThread;
 	};
 }

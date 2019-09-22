@@ -1,19 +1,19 @@
 #include "Timer.h"
 
-void time_measuring::BaseTimer::SetTimeout(const std::chrono::milliseconds & ms, std::function<void(TimeOutReason)> callBack)
+void time_measuring::BaseTimer::SetTimeout(const std::chrono::milliseconds & ms, std::function<void (void)> callBack)
 {
 	timeoutThread = std::thread([=]()
 	{
-		std::unique_lock<std::mutex> lock(timerMutex);
-		retStatus = condTimer.wait_for(lock, ms);
-		TimeOutReason tReason;
-		if (std::cv_status::timeout == retStatus) {
-			tReason = TimeOutReason::TIMER_EXPIRED;
-		}
-		else {
-		   tReason = TimeOutReason::SIGNAL_RECEIVED;
-		}
-		callBack(tReason);
+
+		std::cv_status retStatus;
+		do {
+			std::unique_lock<std::mutex> lock(timerMutex);
+			retStatus = condTimer.wait_for(lock, ms);
+			callBack();
+			if (retStatus == std::cv_status::no_timeout) {
+				printf("What?!\n");
+			}
+		} while (retStatus == std::cv_status::timeout);
 	});
 }
 
