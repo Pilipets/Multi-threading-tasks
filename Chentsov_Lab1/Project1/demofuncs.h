@@ -1,0 +1,98 @@
+#ifndef _SPOS_LAB1_DEMOFUNCS
+#define _SPOS_LAB1_DEMOFUNCS
+
+#include <chrono>
+#include <thread>
+#include <optional>
+#include <condition_variable>
+
+namespace spos::lab1::demo {
+	using namespace std::chrono_literals;
+	using duration = std::chrono::seconds;
+	using std::pair;
+	using std::optional;
+
+	template<typename T> optional<T> gen_func(optional<pair<duration, T>> attribs) {
+		if (attribs) {
+			std::this_thread::sleep_for(std::get<duration>(attribs.value()));
+			return std::get<T>(attribs.value());
+		}
+		else {
+			std::condition_variable cv;
+			std::mutex m;
+			std::unique_lock<std::mutex> lock(m);
+			cv.wait(lock, [] {return false; });
+			return {};
+		}
+	}
+
+	enum op_group { AND, OR, INT, DOUBLE };
+
+	template<op_group O>
+	struct op_group_traits;
+
+	template<typename T>
+	struct op_group_type_traits {
+		typedef T value_type;
+		typedef pair<duration, value_type> attr_type;
+		typedef struct { optional<attr_type> f_attrs, g_attrs; } case_type;
+	};
+
+	template<>
+	struct op_group_traits<INT> : op_group_type_traits<int> {
+		constexpr static case_type cases[] = {
+		{ pair(1s, 3), pair(3s, 5) }, // pair<duration, int>
+		{ pair(3s, 3), pair(1s, 5) },
+		{ pair(3s, 0), {}          },
+		{ {}         , pair(3s, 0) },
+		{ pair(3s, 1), {}          },
+		{ {}         , pair(5s, 1) }
+		};
+	};
+
+	template<>
+	struct op_group_traits<DOUBLE> : op_group_type_traits<double> {
+		constexpr static case_type cases[] = {
+		{ pair(1s, 3.), pair(3s, 5.) },
+		{ pair(3s, 3.), pair(1s, 5.) },
+		{ pair(3s, 0.), {}           },
+		{ {}          , pair(3s, 0.) },
+		{ pair(3s, 1.), {}           },
+		{ {}		  , pair(5s, 1.) }
+		};
+	};
+
+	template<>
+	struct op_group_traits<AND> : op_group_type_traits<bool> {
+		constexpr static case_type cases[] = {
+		{ pair(1s, true) , pair(3s, true)  },
+		{ pair(3s, true) , pair(1s, true)  },
+		{ pair(3s, false), {}              },
+		{ {}             , pair(3s, false) },
+		{ pair(3s, true) , {}              },
+		{ {}             , pair(5s, true)  }
+		};
+	};
+
+	template<>
+	struct op_group_traits<OR> : op_group_type_traits<bool> {
+		constexpr static case_type cases[] = {
+		{ pair(1s, false), pair(3s, false) },
+		{ pair(3s, false), pair(1s, false) },
+		{ pair(3s, true) , {}              },
+		{ {}             , pair(3s, true)  },
+		{ pair(3s, false), {}              },
+		{ {}             , pair(5s, false) }
+		};
+	};
+
+
+	template<op_group O> typename op_group_traits<O>::value_type f_func(int case_nr) {
+		return gen_func<typename op_group_traits<O>::value_type>(op_group_traits<O>::cases[case_nr].f_attrs).value();
+	}
+
+	template<op_group O> typename op_group_traits<O>::value_type g_func(int case_nr) {
+		return gen_func<typename op_group_traits<O>::value_type>(op_group_traits<O>::cases[case_nr].g_attrs).value();
+	}
+}
+#endif

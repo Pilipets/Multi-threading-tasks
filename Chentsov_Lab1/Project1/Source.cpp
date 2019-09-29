@@ -1,10 +1,12 @@
 #include <iostream>
-#include <string>
-#include <boost/process.hpp>
-using namespace std;
-namespace bp = boost::process;
+#include "Manager.h"
+using namespace spos::lab1;
 
 int main(int argc, char **argv) {
 
+	Manager m;
+	m.Run(argc, argv);
+
+	system("pause");
 	return 0;
 }
