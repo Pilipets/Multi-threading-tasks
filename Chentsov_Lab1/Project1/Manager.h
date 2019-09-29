@@ -5,10 +5,10 @@
 
 #include <boost/process.hpp>
 
-using namespace std;
-namespace bp = boost::process;
-
 namespace spos::lab1 {
+	using namespace std;
+	namespace bp = boost::process;
+
 	class Manager
 	{
 	private:
