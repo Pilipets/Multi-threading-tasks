@@ -1,5 +1,6 @@
 #include "Manager.h"
 
+#include <chrono>
 #include <iostream>
 #include <numeric>
 
@@ -68,7 +69,7 @@ namespace spos::lab1 {
 		this->res_func = std::move(res_func);
 		KeyEventListener *p = new KeyEventListener();
 		p->AddHandler(KeyEventListener::KeyCode::ESCAPE, [this](bool pressed) {
-			if (!pressed)
+			if (pressed)
 				stop_job = true;
 		});
 		listener = p;
@@ -76,18 +77,18 @@ namespace spos::lab1 {
 	void Manager::Run(int argc, char** argv)
 	{
 		DivideTasks(argv[0]);
-		listener->Start();
+		listener->StartAsync();
 		set<int> s;
 		for (int i = 0; i < tasks_amount; ++i)
 			s.insert(i);
 
 		while (!stop_job && !s.empty())
 		{
-			listener->Update();
 			UpdateProcessStatus(s);
+			this_thread::sleep_for(std::chrono::milliseconds(100));
 		}
 
-		listener->Stop();
+		listener->StopAsync();
 
 		if (stop_job)
 		{

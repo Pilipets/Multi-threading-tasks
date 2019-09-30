@@ -9,7 +9,7 @@
 #include <boost/process.hpp>
 
 namespace key_listeners {
-	class BaseEventListener;
+	class KeyEventListener;
 }
 
 namespace spos::lab1 {
@@ -41,7 +41,7 @@ namespace spos::lab1 {
 		vector<bp::child> child_processes;
 		vector<int> res_vec;
 		std::function<int(int, int)> res_func;
-		BaseEventListener* listener;
+		KeyEventListener  *listener;
 	};
 }
 
