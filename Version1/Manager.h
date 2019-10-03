@@ -20,14 +20,14 @@ namespace spos::lab1 {
 	class Manager
 	{
 	private:
-		void ExitProcesses(const std::set<int> &running_processes);
+		void StopRunningProcesses();
 		void DivideTasks(const string& exec_name);
-		void UpdateProcessStatus(std::set<int> &running_processes);
-		int ProcessComputationalResult(int tmp_res, std::set<int> &running_processes);
+		void UpdateRunningProcesses();
+		int ProcessComputationalResult(int tmp_res);
 		void ComputeResult();
 	public:
 		Manager();
-		~Manager() = default;
+		~Manager();
 
 		void SetUp(int tasks_amount, std::function<int(int, int)> &&res_func = std::plus<int>());
 		void Run(int argc, char** argv);
@@ -36,10 +36,13 @@ namespace spos::lab1 {
 		int tasks_amount;
 		std::optional<int> res;
 
-		vector<bp::pstream> p_pipes;
+		vector<bp::opstream> in_pipes;
+		vector<bp::ipstream> out_pipes;
 		vector<bp::child> child_processes;
 		vector<int> res_vec;
+		std::set<int> running_processes;
 		std::function<int(int, int)> res_func;
+
 		KeyEventListener  *listener;
 	};
 }
