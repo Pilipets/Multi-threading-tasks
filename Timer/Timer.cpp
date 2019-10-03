@@ -2,9 +2,8 @@
 
 void time_measuring::BaseTimer::SetTimeout(const std::chrono::milliseconds & ms, std::function<void (void)> callBack)
 {
-	timeoutThread = std::thread([=]()
+	timeoutThread = std::thread([this, ms, callBack]()
 	{
-
 		std::cv_status retStatus;
 		do {
 			std::unique_lock<std::mutex> lock(timerMutex);
