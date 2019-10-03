@@ -15,9 +15,9 @@ namespace spos::lab1 {
 	inline void Manager::DivideTasks(const string& exec_name)
 	{
 		for (int i = 0; i < tasks_amount; ++i)
-			in_pipes[i] << i << endl;
+			p_pipes[i] << i << endl;
 		for (int i = 0; i < tasks_amount; ++i)
-			child_processes[i] = bp::child(exec_name, "OPTIONAL", bp::std_in < in_pipes[i], bp::std_out > out_pipes[i], bp::std_err > stderr);
+			child_processes[i] = bp::child(exec_name, "OPTIONAL", bp::std_in < p_pipes[i], bp::std_out > p_pipes[i], bp::std_err > stderr);
 	}
 	void Manager::UpdateProcessStatus(std::set<int>& s)
 	{
@@ -25,7 +25,7 @@ namespace spos::lab1 {
 			int i = *it;
 			if (!child_processes[i].running()) {
 				int tmp_res;
-				out_pipes[i] >> tmp_res;
+				p_pipes[i] >> tmp_res;
 
 				if (!ProcessComputationalResult(tmp_res, s))
 					return;
@@ -33,7 +33,6 @@ namespace spos::lab1 {
 				res_vec[i] = tmp_res;
 				cout << "i= " << i << ", res= " << res_vec[i] << endl;
 				it = s.erase(it);
-				child_processes[i].wait(); // we do not need to wait actually here...
 			}
 			else
 				it++;
@@ -62,8 +61,7 @@ namespace spos::lab1 {
 	void Manager::SetUp(int tasks_amount, std::function<int(int, int)>&& res_func)
 	{
 		this->tasks_amount = tasks_amount;
-		in_pipes.resize(tasks_amount);
-		out_pipes.resize(tasks_amount);
+		p_pipes.resize(tasks_amount);
 		child_processes.resize(tasks_amount);
 		res_vec.resize(tasks_amount, -1);
 		this->res_func = std::move(res_func);
@@ -89,7 +87,8 @@ namespace spos::lab1 {
 		}
 
 		listener->StopAsync();
-
+		for (int i = 0; i < tasks_amount; ++i)
+			p_pipes[i].close();
 		if (stop_job)
 		{
 			cout << "Result computation has been stopped" << endl;

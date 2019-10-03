@@ -36,8 +36,7 @@ namespace spos::lab1 {
 		int tasks_amount;
 		std::optional<int> res;
 
-		vector<bp::opstream> in_pipes;
-		vector<bp::ipstream> out_pipes;
+		vector<bp::pstream> p_pipes;
 		vector<bp::child> child_processes;
 		vector<int> res_vec;
 		std::function<int(int, int)> res_func;
