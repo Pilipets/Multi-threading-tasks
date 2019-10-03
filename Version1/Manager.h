@@ -30,7 +30,7 @@ namespace spos::lab1 {
 		~Manager();
 
 		void SetUp(int tasks_amount, std::function<int(int, int)> &&res_func = std::plus<int>());
-		void Run(int argc, char** argv);
+		void RunVersion1(int argc, char** argv);
 	private:
 		bool stop_job;
 		int tasks_amount;

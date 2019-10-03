@@ -89,7 +89,7 @@ namespace spos::lab1 {
 		});
 		listener = p;
 	}
-	void Manager::Run(int argc, char** argv)
+	void Manager::RunVersion1(int argc, char** argv)
 	{
 		DivideTasks(argv[0]);
 

@@ -18,7 +18,7 @@ int RunManager(int argc, char** argv)
 	{
 		Manager m;
 		m.SetUp(2);
-		m.RunVersion1(argc, argv);
+		m.RunVersion2(argc, argv);
 		return 0;
 	}
 	else if (argc == 2 && std::string(argv[1]) == "OPTIONAL") {
@@ -38,7 +38,7 @@ void ExecuteFunc(int index, int& res)
 {
 	namespace testing = spos::lab1::demo;
 	if (index & 1)
-		res = testing::f_func<testing::INT>(2);
+		res = testing::f_func<testing::INT>(1);
 	else
-		res = testing::g_func<testing::INT>(2);
+		res = testing::g_func<testing::INT>(1);
 }
