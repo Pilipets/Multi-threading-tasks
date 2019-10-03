@@ -4,9 +4,9 @@
 #include <iostream>
 #include <numeric>
 
-#include "EventListener.h"
+#include "Timer.h"
 
-namespace spos::lab1::version1 {
+namespace spos::lab1::version2 {
 	inline void Manager::StopRunningProcesses()
 	{
 		std::set<int>& s = running_processes;
@@ -40,9 +40,35 @@ namespace spos::lab1::version1 {
 				it++;
 		}
 	}
+	void Manager::ProcessPromptMessage()
+	{
+		if (!show_prompt)
+			return;
+
+		cout << prompt_message << endl;
+		int choice;
+		cin >> choice;
+		switch (choice)
+		{
+		case 2:
+			show_prompt = false;
+			break;
+		case 3:
+			stop_job = true;
+			break;
+		case 1:
+			timer->Start([this]() {
+				ProcessPromptMessage();
+			}, std::chrono::milliseconds(1000), true);
+			break;
+		default:
+			cout << "Unknown message type" << endl;
+		}
+		system("cls");
+	}
 	int Manager::ProcessComputationalResult(int tmp_res)
 	{
-		cout << "tmp_res= " << tmp_res << endl;
+		//cout << "tmp_res= " << tmp_res << endl;
 		if (tmp_res == 4)
 		{
 			res = 0;
@@ -58,8 +84,15 @@ namespace spos::lab1::version1 {
 		res = std::reduce(res_vec.begin(), res_vec.end(), 0, std::move(res_func));
 	}
 	Manager::Manager() :
-		stop_job(false), tasks_amount(0), res(std::nullopt), listener(nullptr)
-	{}
+		stop_job(false), show_prompt(true), tasks_amount(0), res(std::nullopt)
+	{
+		prompt_message = "----Choose your option----\n"
+						 "1.Continue................\n"
+						 "2.Continue without prompt.\n"
+						 "3.Cancel..................\n";
+						  "Choose your action: ";
+		timer = new SimpleTimer();
+	}
 
 	Manager::~Manager()
 	{
@@ -78,35 +111,25 @@ namespace spos::lab1::version1 {
 		child_processes.resize(tasks_amount);
 		res_vec.resize(tasks_amount, -1);
 		this->res_func = std::move(res_func);
-
-		KeyEventListener *p = new KeyEventListener();
-		p->AddHandler(KeyEventListener::KeyCode::ESCAPE, [this](bool pressed) {
-			if (pressed)
-				stop_job = true;
-		});
-		listener = p;
 	}
-	void Manager::RunVersion1(int argc, char** argv)
+	void Manager::RunVersion2(int argc, char** argv)
 	{
 		DivideTasks(argv[0]);
 
 		for (int i = 0; i < tasks_amount; ++i)
 			running_processes.insert(i);
-		listener->StartAsync();
-
+		timer->Start([this]() {
+			ProcessPromptMessage();
+		}, std::chrono::milliseconds(1000), true);
 		while (!stop_job && !running_processes.empty())
 		{
 			UpdateRunningProcesses();
 			this_thread::sleep_for(std::chrono::milliseconds(100));
 		}
 
-		listener->StopAsync();
-
 		if (stop_job && !running_processes.empty())
 		{
 			StopRunningProcesses();
-			//significant point: esc make stop_job = true
-			//but musn't call StopRunningProcesses()
 			cout << "Result computation has been stopped" << endl;
 		}
 		else {

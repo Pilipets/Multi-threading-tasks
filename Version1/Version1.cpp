@@ -2,7 +2,7 @@
 
 #include "demofuncs.h"
 #include "Manager.h"
-using namespace spos::lab1;
+using namespace spos::lab1::version1;
 using namespace spos::lab1::demo;
 
 int RunManager(int argc, char** argv);

@@ -2,7 +2,8 @@
 
 #include "demofuncs.h"
 #include "Manager.h"
-using namespace spos::lab1;
+#include "Timer.h"
+using namespace spos::lab1::version2;
 using namespace spos::lab1::demo;
 
 int RunManager(int argc, char** argv);
