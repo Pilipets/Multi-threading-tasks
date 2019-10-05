@@ -1,9 +1,9 @@
 #pragma once
-#include <iostream>
-#include <string>
-#include <future>
-#include <mutex>
+
 #include <chrono>
+#include <iostream>
+#include <mutex>
+#include <string>
 #include <queue>
 
 namespace spos::lab1::timeutils {
@@ -17,7 +17,7 @@ namespace spos::lab1::timeutils {
 			expire_time = Clock::now() + duration;
 		}
 		bool Finished() {
-			return Clock::now >= expire_timer;
+			return Clock::now() >= expire_time;
 		}
 	private:
 		TimePoint expire_time;

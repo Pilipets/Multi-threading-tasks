@@ -1,5 +1,6 @@
 #pragma once
 
+#include <chrono>
 #include <optional>
 #include <set>
 #include <string>
@@ -46,7 +47,7 @@ namespace spos::lab1::version2 {
 		std::set<int> running_processes;
 		std::function<int(int, int)> res_func;
 
-		SimpleTimer* timer;
+		SimpleTimer<> *timer;
 	};
 }
 

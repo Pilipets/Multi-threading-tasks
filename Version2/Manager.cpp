@@ -23,7 +23,7 @@ namespace spos::lab1::version2 {
 	void Manager::UpdateRunningProcesses()
 	{
 		std::set<int>& s = running_processes;
-		for (auto it = s.begin(); it != s.end() && !stop_job;) {
+		for (auto it = s.begin(); it != s.end();) {
 			int i = *it;
 			if (!child_processes[i].running()) {
 				int tmp_res;
@@ -42,11 +42,11 @@ namespace spos::lab1::version2 {
 	}
 	void Manager::UpdatePromptMessage()
 	{
-		if (!show_prompt || !timer->Done())
+		if (!show_prompt || !timer->Finished())
 			return;
 
 
-		cout << prompt_message << endl;
+		cout << prompt_message;
 		int choice;
 		cin >> choice;
 		switch (choice)
@@ -58,7 +58,7 @@ namespace spos::lab1::version2 {
 			stop_job = true;
 			break;
 		case 1:
-			timer->Start(std::chrono::seconds(2));
+			timer->Start(prompt_interval);
 			break;
 		default:
 			cout << "Unknown message type" << endl;
@@ -67,8 +67,7 @@ namespace spos::lab1::version2 {
 	}
 	int Manager::ProcessComputationalResult(int tmp_res)
 	{
-		//cout << "tmp_res= " << tmp_res << endl;
-		if (tmp_res == 4)
+		if (tmp_res == 0)
 		{
 			res = 0;
 			StopRunningProcesses();
@@ -88,7 +87,7 @@ namespace spos::lab1::version2 {
 		prompt_message = "----Choose your option----\n"
 						 "1.Continue................\n"
 						 "2.Continue without prompt.\n"
-						 "3.Cancel..................\n";
+						 "3.Cancel..................\n"
 						  "Choose your action: ";
 		timer = new SimpleTimer();
 	}
@@ -120,7 +119,7 @@ namespace spos::lab1::version2 {
 		for (int i = 0; i < tasks_amount; ++i)
 			running_processes.insert(i);
 
-		timer->Start(std::chrono::seconds(2));
+		timer->Start(prompt_interval);
 
 		while (!stop_job && !running_processes.empty())
 		{
