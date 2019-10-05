@@ -4,7 +4,7 @@
 #include <iostream>
 #include <numeric>
 
-#include "Timer.h"
+#include "TimeUtils.h"
 
 namespace spos::lab1::version2 {
 	inline void Manager::StopRunningProcesses()
@@ -40,10 +40,11 @@ namespace spos::lab1::version2 {
 				it++;
 		}
 	}
-	void Manager::ProcessPromptMessage()
+	void Manager::UpdatePromptMessage()
 	{
-		if (!show_prompt)
+		if (!show_prompt || !timer->Done())
 			return;
+
 
 		cout << prompt_message << endl;
 		int choice;
@@ -57,9 +58,7 @@ namespace spos::lab1::version2 {
 			stop_job = true;
 			break;
 		case 1:
-			timer->Start([this]() {
-				ProcessPromptMessage();
-			}, std::chrono::milliseconds(1000), true);
+			timer->Start(std::chrono::seconds(2));
 			break;
 		default:
 			cout << "Unknown message type" << endl;
@@ -101,16 +100,18 @@ namespace spos::lab1::version2 {
 		child_processes.clear();
 		res_vec.clear();
 		running_processes.clear();
+		delete timer;
 	}
 
-	void Manager::SetUp(int tasks_amount, std::function<int(int, int)>&& res_func)
+	void Manager::SetUp(int tasks_amount, std::chrono::milliseconds&& duration, std::function<int(int, int)>&& res_func)
 	{
 		this->tasks_amount = tasks_amount;
+		this->prompt_interval = duration;
 		in_pipes.resize(tasks_amount);
 		out_pipes.resize(tasks_amount);
 		child_processes.resize(tasks_amount);
 		res_vec.resize(tasks_amount, -1);
-		this->res_func = std::move(res_func);
+		this->res_func = res_func;
 	}
 	void Manager::RunVersion2(int argc, char** argv)
 	{
@@ -118,11 +119,12 @@ namespace spos::lab1::version2 {
 
 		for (int i = 0; i < tasks_amount; ++i)
 			running_processes.insert(i);
-		timer->Start([this]() {
-			ProcessPromptMessage();
-		}, std::chrono::milliseconds(1000), true);
+
+		timer->Start(std::chrono::seconds(2));
+
 		while (!stop_job && !running_processes.empty())
 		{
+			UpdatePromptMessage();
 			UpdateRunningProcesses();
 			this_thread::sleep_for(std::chrono::milliseconds(100));
 		}

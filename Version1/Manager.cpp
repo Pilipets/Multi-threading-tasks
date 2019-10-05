@@ -77,7 +77,7 @@ namespace spos::lab1::version1 {
 		out_pipes.resize(tasks_amount);
 		child_processes.resize(tasks_amount);
 		res_vec.resize(tasks_amount, -1);
-		this->res_func = std::move(res_func);
+		this->res_func = res_func;
 
 		KeyEventListener *p = new KeyEventListener();
 		p->AddHandler(KeyEventListener::KeyCode::ESCAPE, [this](bool pressed) {

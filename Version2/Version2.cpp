@@ -2,7 +2,7 @@
 
 #include "demofuncs.h"
 #include "Manager.h"
-#include "Timer.h"
+
 using namespace spos::lab1::version2;
 using namespace spos::lab1::demo;
 
@@ -18,7 +18,7 @@ int RunManager(int argc, char** argv)
 	if (argc == 1)
 	{
 		Manager m;
-		m.SetUp(2);
+		m.SetUp(2, std::chrono::milliseconds(1000));
 		m.RunVersion2(argc, argv);
 		return 0;
 	}

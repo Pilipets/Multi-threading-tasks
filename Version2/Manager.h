@@ -8,12 +8,13 @@
 
 #include <boost/process.hpp>
 
-namespace spos::lab1::timers {
+namespace spos::lab1::timeutils {
+	template <class Clock = std::chrono::system_clock>
 	class SimpleTimer;
 }
 namespace spos::lab1::version2 {
 	using namespace std;
-	using namespace spos::lab1::timers;
+	using namespace spos::lab1::timeutils;
 	namespace bp = boost::process;
 
 	class Manager
@@ -22,20 +23,21 @@ namespace spos::lab1::version2 {
 		void StopRunningProcesses();
 		void DivideTasks(const string& exec_name);
 		void UpdateRunningProcesses();
-		void ProcessPromptMessage();
+		void UpdatePromptMessage();
 		int ProcessComputationalResult(int tmp_res);
 		void ComputeResult();
 	public:
 		Manager();
 		~Manager();
 
-		void SetUp(int tasks_amount, std::function<int(int, int)> &&res_func = std::plus<int>());
+		void SetUp(int tasks_amount, std::chrono::milliseconds&& duration, std::function<int(int, int)> &&res_func = std::plus<int>());
 		void RunVersion2(int argc, char** argv);
 	private:
 		bool stop_job, show_prompt;
 		int tasks_amount;
 		std::optional<int> res;
 		std::string prompt_message;
+		std::chrono::milliseconds prompt_interval;
 
 		vector<bp::opstream> in_pipes;
 		vector<bp::ipstream> out_pipes;
