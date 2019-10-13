@@ -4,6 +4,7 @@
 #include <iostream>
 #include <numeric>
 
+#include "demofuncs.h"
 #include "TimeUtils.h"
 
 namespace spos::lab1::version2 {
@@ -139,5 +140,19 @@ namespace spos::lab1::version2 {
 		}
 
 		system("pause");
+	}
+	void Manager::RunParrallelFunction(int version)
+	{
+		namespace testing = spos::lab1::demo;
+		int task_number;
+		cin >> task_number;
+
+		int res;
+		if (task_number & 1)
+			res = testing::f_func<testing::INT>(version);
+		else
+			res = testing::g_func<testing::INT>(version);
+
+		cout << res << endl;
 	}
 }

@@ -29,8 +29,10 @@ namespace spos::lab1::version1 {
 		Manager();
 		~Manager();
 
+		bool isRunning();
 		void SetUp(int tasks_amount, std::function<int(int, int)> &&res_func = std::plus<int>());
 		void RunVersion1(int argc, char** argv);
+		static void RunParrallelFunction(int version);
 	private:
 		bool stop_job;
 		int tasks_amount;

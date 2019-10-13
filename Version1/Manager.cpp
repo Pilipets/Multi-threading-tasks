@@ -4,6 +4,7 @@
 #include <iostream>
 #include <numeric>
 
+#include "demofuncs.h"
 #include "EventListener.h"
 
 namespace spos::lab1::version1 {
@@ -70,6 +71,11 @@ namespace spos::lab1::version1 {
 		running_processes.clear();
 	}
 
+	inline bool Manager::isRunning()
+	{
+		return !stop_job && running_processes.size();
+	}
+
 	void Manager::SetUp(int tasks_amount, std::function<int(int, int)>&& res_func)
 	{
 		this->tasks_amount = tasks_amount;
@@ -115,5 +121,19 @@ namespace spos::lab1::version1 {
 		}
 
 		system("pause");
+	}
+	void Manager::RunParrallelFunction(int version)
+	{
+		namespace testing = spos::lab1::demo;
+		int task_number;
+		cin >> task_number;
+
+		int res;
+		if (task_number & 1)
+			res = testing::f_func<testing::INT>(version);
+		else
+			res = testing::g_func<testing::INT>(version);
+
+		cout << res << endl;
 	}
 }

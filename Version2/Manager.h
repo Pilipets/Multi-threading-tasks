@@ -33,6 +33,7 @@ namespace spos::lab1::version2 {
 
 		void SetUp(int tasks_amount, std::chrono::milliseconds&& duration, std::function<int(int, int)> &&res_func = std::plus<int>());
 		void RunVersion2(int argc, char** argv);
+		static void RunParrallelFunction(int version);
 	private:
 		bool stop_job, show_prompt;
 		int tasks_amount;
