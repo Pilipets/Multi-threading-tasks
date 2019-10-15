@@ -21,7 +21,7 @@ namespace spos::lab1::version1 {
 	{
 	private:
 		void StopRunningProcesses();
-		void DivideTasks(const string& exec_name);
+		void DivideTasks(const string& exec_name, int arg);
 		void UpdateRunningProcesses();
 		int ProcessComputationalResult(int tmp_res);
 		void ComputeResult();
@@ -32,7 +32,7 @@ namespace spos::lab1::version1 {
 		bool isRunning();
 		void SetUp(int tasks_amount, std::function<int(int, int)> &&res_func = std::plus<int>());
 		void RunVersion1(int argc, char** argv);
-		static void RunParrallelFunction(int version);
+		static void RunParrallelFunction();
 	private:
 		bool stop_job;
 		int tasks_amount;

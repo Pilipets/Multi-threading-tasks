@@ -13,11 +13,15 @@ namespace spos::lab1::version1 {
 		std::set<int>& s = running_processes;
 		for (int index : s)
 			child_processes[index].terminate();
+		s.clear();
 	}
-	inline void Manager::DivideTasks(const string& exec_name)
+	inline void Manager::DivideTasks(const string& exec_name, int arg)
 	{
 		for (int i = 0; i < tasks_amount; ++i)
+		{
 			in_pipes[i] << i << endl;
+			in_pipes[i] << arg << endl;
+		}
 		for (int i = 0; i < tasks_amount; ++i)
 			child_processes[i] = bp::child(exec_name, "OPTIONAL", bp::std_in < in_pipes[i], bp::std_out > out_pipes[i], bp::std_err > stderr);
 	}
@@ -44,7 +48,7 @@ namespace spos::lab1::version1 {
 	int Manager::ProcessComputationalResult(int tmp_res)
 	{
 		cout << "tmp_res= " << tmp_res << endl;
-		if (tmp_res == 4)
+		if (tmp_res == 0)
 		{
 			res = 0;
 			StopRunningProcesses();
@@ -94,7 +98,11 @@ namespace spos::lab1::version1 {
 	}
 	void Manager::RunVersion1(int argc, char** argv)
 	{
-		DivideTasks(argv[0]);
+		cout << "Enter function's argument: ";
+		int func_arg;
+		std::cin >> func_arg;
+
+		DivideTasks(argv[0], func_arg);
 
 		for (int i = 0; i < tasks_amount; ++i)
 			running_processes.insert(i);
@@ -122,18 +130,26 @@ namespace spos::lab1::version1 {
 
 		system("pause");
 	}
-	void Manager::RunParrallelFunction(int version)
+	void Manager::RunParrallelFunction()
 	{
 		namespace testing = spos::lab1::demo;
-		int task_number;
-		cin >> task_number;
+
+		// Parrallel processes accepts function number(0,1,2 ... ,n)
+		// Currently used to identify whether call f or g, but can be generalized to n functions
+		int f_number;
+		cin >> f_number;
+
+		int f_arg; 
+		cin >> f_arg;
 
 		int res;
-		if (task_number & 1)
-			res = testing::f_func<testing::INT>(version);
+		if (f_number & 1)
+			res = testing::f_func<testing::INT>(f_arg);
 		else
-			res = testing::g_func<testing::INT>(version);
+			res = testing::g_func<testing::INT>(f_arg);
 
+		// For n functions external function call should be used
+		// CallFunc(function_number, arg, res) or res = CallFunc(function_number, arg)
 		cout << res << endl;
 	}
 }

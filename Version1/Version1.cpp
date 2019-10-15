@@ -12,13 +12,17 @@ int RunManager(int argc, char** argv)
 {
 	if (argc == 1)
 	{
-		Manager m;
-		m.SetUp(2);
-		m.RunVersion1(argc, argv);
+		while (true)
+		{
+			Manager m;
+			m.SetUp(2);
+			m.RunVersion1(argc, argv);
+			system("cls");
+		}
 		return 0;
 	}
 	else if (argc == 2 && std::string(argv[1]) == "OPTIONAL") {
-		Manager::RunParrallelFunction(2);
+		Manager::RunParrallelFunction();
 		return 0;
 	}
 	return -1;

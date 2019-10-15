@@ -18,7 +18,7 @@ int RunManager(int argc, char** argv)
 		return 0;
 	}
 	else if (argc == 2 && std::string(argv[1]) == "OPTIONAL") {
-		Manager::RunParrallelFunction(1);
+		Manager::RunParrallelFunction();
 		return 0;
 	}
 	return -1;
