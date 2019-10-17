@@ -45,7 +45,9 @@ namespace spos::lab1::version1 {
 
 		bool isRunning();
 		// 
-		void SetUp(int tasks_amount, std::function<int(int, int)> &&res_func = std::plus<int>());
+		void SetUp(int tasks_amount, std::function<int(int, int)> &&res_func = [](int a, int b)->int {
+			return std::min(a, b);
+		});
 		void RunVersion1(int argc, char** argv);
 		static void RunParrallelFunction();
 	private:

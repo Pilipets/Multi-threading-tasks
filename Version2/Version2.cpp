@@ -17,6 +17,7 @@ int RunManager(int argc, char** argv)
 			Manager m;
 			m.SetUp(2, std::chrono::milliseconds(1000));
 			m.RunVersion2(argc, argv);
+			system("cls");
 		}
 		return 0;
 	}

@@ -60,7 +60,7 @@ namespace spos::lab1::version1 {
 	{
 		if (res.has_value())
 			return;
-		res = std::reduce(res_vec.begin(), res_vec.end(), 0, std::move(res_func));
+		res = std::reduce(std::next(res_vec.begin()), res_vec.end(), res_vec.front(), std::move(res_func));
 	}
 	Manager::Manager() :
 		stop_job(false), tasks_amount(0), res(std::nullopt), listener(nullptr)
@@ -87,7 +87,7 @@ namespace spos::lab1::version1 {
 		out_pipes.resize(tasks_amount);
 		child_processes.resize(tasks_amount);
 		res_vec.resize(tasks_amount, -1);
-		this->res_func = res_func;
+		this->res_func = std::move(res_func);
 
 		KeyEventListener *p = new KeyEventListener();
 		p->AddHandler(KeyEventListener::KeyCode::ESCAPE, [this](bool pressed) {

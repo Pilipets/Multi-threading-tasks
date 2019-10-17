@@ -72,6 +72,7 @@ namespace spos::lab1::version2 {
 	}
 	int Manager::ProcessComputationalResult(int tmp_res)
 	{
+		cout << "tmp_res= " << tmp_res << endl;
 		if (tmp_res == 0)
 		{
 			res = 0;
@@ -84,7 +85,7 @@ namespace spos::lab1::version2 {
 	{
 		if (res.has_value())
 			return;
-		res = std::reduce(res_vec.begin(), res_vec.end(), 0, std::move(res_func));
+		res = std::reduce(std::next(res_vec.begin()), res_vec.end(), res_vec.front(), std::move(res_func));
 	}
 	Manager::Manager() :
 		stop_job(false), show_prompt(true), tasks_amount(0), res(std::nullopt)
@@ -115,7 +116,7 @@ namespace spos::lab1::version2 {
 		out_pipes.resize(tasks_amount);
 		child_processes.resize(tasks_amount);
 		res_vec.resize(tasks_amount, -1);
-		this->res_func = res_func;
+		this->res_func = std::move(res_func);
 	}
 	void Manager::RunVersion2(int argc, char** argv)
 	{

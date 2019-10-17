@@ -1,5 +1,6 @@
 #pragma once
 
+#include <algorithm>
 #include <chrono>
 #include <optional>
 #include <set>
@@ -30,8 +31,11 @@ namespace spos::lab1::version2 {
 	public:
 		Manager();
 		~Manager();
-
-		void SetUp(int tasks_amount, std::chrono::milliseconds&& duration, std::function<int(int, int)> &&res_func = std::plus<int>());
+		int&& a = 5;
+		void SetUp(int tasks_amount, std::chrono::milliseconds&& duration, 
+			std::function<int(int, int)> &&res_func = [](int a, int b)->int {
+			return std::min(a, b);
+		});
 		void RunVersion2(int argc, char** argv);
 		static void RunParrallelFunction();
 	private:
@@ -48,7 +52,7 @@ namespace spos::lab1::version2 {
 		std::set<int> running_processes;
 		std::function<int(int, int)> res_func;
 
-		SimpleTimer<> *timer;
+		SimpleTimer<> *timer; // Pointer to the simple timer that runs async
 	};
 }
 
