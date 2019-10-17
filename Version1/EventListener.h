@@ -9,8 +9,10 @@
 #include <vector>
 
 namespace key_listeners {
+	// Base class for handling events over the Console
 	class BaseEventListener {
 	protected:
+
 		virtual void KeyEventProc(KEY_EVENT_RECORD ker);
 		void ErrorExit(const char*);
 		void CaptureConsole();
@@ -20,6 +22,8 @@ namespace key_listeners {
 		~BaseEventListener();
 		void Start() { CaptureConsole(); }
 		void Stop() { ReleaseConsole(); }
+
+		// Processes events that has happened to the console
 		void Update();
 	private:
 		DWORD cNumRead, fdwMode;
@@ -29,6 +33,7 @@ namespace key_listeners {
 
 	};
 
+	// Async listener for console key events
 	class KeyEventListener : public BaseEventListener {
 	private:
 		void KeyEventProc(KEY_EVENT_RECORD ker) override;

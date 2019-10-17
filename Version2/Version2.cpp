@@ -12,9 +12,12 @@ int RunManager(int argc, char** argv)
 {
 	if (argc == 1)
 	{
-		Manager m;
-		m.SetUp(2, std::chrono::milliseconds(1000));
-		m.RunVersion2(argc, argv);
+		while (true)
+		{
+			Manager m;
+			m.SetUp(2, std::chrono::milliseconds(1000));
+			m.RunVersion2(argc, argv);
+		}
 		return 0;
 	}
 	else if (argc == 2 && std::string(argv[1]) == "OPTIONAL") {
