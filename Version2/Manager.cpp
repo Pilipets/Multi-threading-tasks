@@ -141,11 +141,11 @@ namespace spos::lab1::version2 {
 		if (stop_job && !running_processes.empty())
 		{
 			StopRunningProcesses();
-			cout << "Result computation has been stopped" << endl;
+			cout << "Result can't be computed" << endl;
 		}
 		else {
 			ComputeResult();
-			cout << "Res= " << res.value() << endl;
+			cout << "Computations result= " << res.value() << endl;
 		}
 
 		system("pause");

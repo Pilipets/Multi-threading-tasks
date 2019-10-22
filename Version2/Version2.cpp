@@ -15,7 +15,7 @@ int RunManager(int argc, char** argv)
 		while (true)
 		{
 			Manager m;
-			m.SetUp(2, std::chrono::milliseconds(1000));
+			m.SetUp(2, std::chrono::milliseconds(2000));
 			m.RunVersion2(argc, argv);
 			system("cls");
 		}

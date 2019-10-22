@@ -6,6 +6,12 @@
 #include <optional>
 #include <condition_variable>
 
+# ifdef __GNUG__
+# define INLINE_CONST	constexpr
+# else
+# define INLINE_CONST	inline const
+# endif
+
 namespace spos::lab1::demo {
 	using namespace std::chrono_literals;
 	using duration = std::chrono::seconds;
@@ -40,52 +46,52 @@ namespace spos::lab1::demo {
 
 	template<>
 	struct op_group_traits<INT> : op_group_type_traits<int> {
-		constexpr static case_type cases[] = {
-		{ pair(1s, 3), pair(3s, 5) }, // pair<duration, int>
-		{ pair(3s, 3), pair(1s, 5) },
-		{ pair(3s, 0), {}          },
-		{ {}         , pair(3s, 0) },
-		{ pair(3s, 1), {}          },
-		{ {}         , pair(5s, 1) }
+		INLINE_CONST static case_type cases[] = {
+		{pair(1s, 3),pair(3s, 5) }, // pair<duration, int>
+		{pair(3s, 3),pair(1s, 5) },
+		{pair(3s, 0),{} },
+		{{},pair(3s, 0) },
+		{pair(3s, 1),{} },
+		{{},pair(5s, 1) }
 		};
 	};
-
+	/*
 	template<>
 	struct op_group_traits<DOUBLE> : op_group_type_traits<double> {
-		constexpr static case_type cases[] = {
-		{ pair(1s, 3.), pair(3s, 5.) },
-		{ pair(3s, 3.), pair(1s, 5.) },
-		{ pair(3s, 0.), {}           },
-		{ {}          , pair(3s, 0.) },
-		{ pair(3s, 1.), {}           },
-		{ {}		  , pair(5s, 1.) }
+		INLINE_CONST static case_type cases[] = {
+		{.f_attrs = pair(1s, 3.),.g_attrs = pair(3s, 5.) },
+		{.f_attrs = pair(3s, 3.),.g_attrs = pair(1s, 5.) },
+		{.f_attrs = pair(3s, 0.),.g_attrs = {} },
+		{.f_attrs = {},.g_attrs = pair(3s, 0.) },
+		{.f_attrs = pair(3s, 1.),.g_attrs = {} },
+		{.f_attrs = {},.g_attrs = pair(5s, 1.) }
 		};
 	};
 
 	template<>
 	struct op_group_traits<AND> : op_group_type_traits<bool> {
-		constexpr static case_type cases[] = {
-		{ pair(1s, true) , pair(3s, true)  },
-		{ pair(3s, true) , pair(1s, true)  },
-		{ pair(3s, false), {}              },
-		{ {}             , pair(3s, false) },
-		{ pair(3s, true) , {}              },
-		{ {}             , pair(5s, true)  }
+		INLINE_CONST static case_type cases[] = {
+		{.f_attrs = pair(1s, true),.g_attrs = pair(3s, true) },
+		{.f_attrs = pair(3s, true),.g_attrs = pair(1s, true) },
+		{.f_attrs = pair(3s, false),.g_attrs = {} },
+		{.f_attrs = {},.g_attrs = pair(3s, false) },
+		{.f_attrs = pair(3s, true),.g_attrs = {} },
+		{.f_attrs = {},.g_attrs = pair(5s, true) }
 		};
 	};
 
 	template<>
 	struct op_group_traits<OR> : op_group_type_traits<bool> {
-		constexpr static case_type cases[] = {
-		{ pair(1s, false), pair(3s, false) },
-		{ pair(3s, false), pair(1s, false) },
-		{ pair(3s, true) , {}              },
-		{ {}             , pair(3s, true)  },
-		{ pair(3s, false), {}              },
-		{ {}             , pair(5s, false) }
+		INLINE_CONST static case_type cases[] = {
+		{.f_attrs = pair(1s, false),.g_attrs = pair(3s, false) },
+		{.f_attrs = pair(3s, false),.g_attrs = pair(1s, false) },
+		{.f_attrs = pair(3s, true),.g_attrs = {} },
+		{.f_attrs = {},.g_attrs = pair(3s, true) },
+		{.f_attrs = pair(3s, false),.g_attrs = {} },
+		{.f_attrs = {},.g_attrs = pair(5s, false) }
 		};
 	};
-
+	*/
 
 	template<op_group O> typename op_group_traits<O>::value_type f_func(int case_nr) {
 		return gen_func<typename op_group_traits<O>::value_type>(op_group_traits<O>::cases[case_nr].f_attrs).value();
