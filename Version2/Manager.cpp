@@ -15,6 +15,16 @@ namespace spos::lab1::version2 {
 			child_processes[index].terminate();
 		s.clear();
 	}
+	inline void Manager::PrintRunningProcesses()
+	{
+		if (running_processes.empty())
+			return;
+		cout << "functions with indexes ";
+		std::vector<int> tmp(running_processes.begin(), running_processes.end());
+		for (size_t i = 0; i < tmp.size() - 1; ++i)
+			cout << i << ", ";
+		cout << tmp.back() << " are running\n";
+	}
 	inline void Manager::DivideTasks(const string& exec_name, int arg)
 	{
 		for (int i = 0; i < tasks_amount; ++i)
@@ -29,8 +39,9 @@ namespace spos::lab1::version2 {
 	{
 		std::set<int>& s = running_processes;
 		for (auto it = s.begin(); it != s.end();) {
+			std::error_code err;
 			int i = *it;
-			if (!child_processes[i].running()) {
+			if (!child_processes[i].running(err) && !err) {
 				int tmp_res;
 				out_pipes[i] >> tmp_res;
 
@@ -41,6 +52,8 @@ namespace spos::lab1::version2 {
 				it = s.erase(it);
 				child_processes[i].wait();
 			}
+			else if (err)
+				it = s.erase(it);
 			else
 				it++;
 		}
@@ -70,14 +83,13 @@ namespace spos::lab1::version2 {
 		}
 		system("cls");
 	}
-	int Manager::ProcessComputationalResult(int tmp_res)
+	int Manager::ProcessComputationalResult(int index, int tmp_res)
 	{
-		cout << "tmp_res= " << tmp_res << endl;
+		cout << "Function " << index << ", res= " << tmp_res << endl;
 		if (tmp_res == 0)
 		{
 			res = 0;
 			StopRunningProcesses();
-			return 0;
 		}
 		return running_processes.size(); //return number of active child processes for which manager should wait
 	}
@@ -140,8 +152,9 @@ namespace spos::lab1::version2 {
 
 		if (stop_job && !running_processes.empty())
 		{
+			cout << "Result can't be computed, because ";
+			PrintRunningProcesses();
 			StopRunningProcesses();
-			cout << "Result can't be computed" << endl;
 		}
 		else {
 			ComputeResult();

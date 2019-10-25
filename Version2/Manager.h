@@ -23,10 +23,11 @@ namespace spos::lab1::version2 {
 	{
 	private:
 		void StopRunningProcesses();
+		void PrintRunningProcesses();
 		void DivideTasks(const string& exec_name, int arg);
 		void UpdateRunningProcesses();
 		void UpdatePromptMessage();
-		int ProcessComputationalResult(int tmp_res);
+		int ProcessComputationalResult(int index, int tmp_res);
 		void ComputeResult();
 	public:
 		Manager();

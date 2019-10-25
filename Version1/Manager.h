@@ -26,6 +26,7 @@ namespace spos::lab1::version1 {
 		// or computations were cancelled by user
 		void StopRunningProcesses();
 
+		void PrintRunningProcesses();
 		// Creates child processes with redirecting stdin, stdout to the appropriate
 		// unnamed pipes for each of them
 		void DivideTasks(const string& exec_name, int arg);
@@ -34,7 +35,7 @@ namespace spos::lab1::version1 {
 		// updates running_processes set
 		void UpdateRunningProcesses();
 
-		int ProcessComputationalResult(int tmp_res);
+		int ProcessComputationalResult(int index, int tmp_res);
 
 		// Applies res_func to results from parrallel tasks
 		// Result is stored in res
