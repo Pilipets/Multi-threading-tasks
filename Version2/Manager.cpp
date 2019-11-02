@@ -13,7 +13,7 @@ namespace spos::lab1::version2 {
 		std::set<int>& s = running_processes;
 		for (int index : s) // send the signals to terminate
 			child_processes[index].terminate();
-		for (int index : s) // //to avoid a zombie process & get the exit code
+		for (int index : s) // to avoid a zombie process & get the exit code
 			child_processes[index].wait();
 		s.clear();
 	}
@@ -114,11 +114,6 @@ namespace spos::lab1::version2 {
 
 	Manager::~Manager()
 	{
-		in_pipes.clear();
-		out_pipes.clear();
-		child_processes.clear();
-		res_vec.clear();
-		running_processes.clear();
 		delete timer;
 	}
 
