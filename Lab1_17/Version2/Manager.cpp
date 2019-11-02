@@ -45,7 +45,7 @@ namespace spos::lab1::version2 {
 				int tmp_res;
 				out_pipes[i] >> tmp_res;
 
-				if (!ProcessComputationalResult(tmp_res))
+				if (!ProcessComputationalResult(i,tmp_res))
 					return;
 
 				res_vec[i] = tmp_res;
