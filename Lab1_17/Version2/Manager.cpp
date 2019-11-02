@@ -11,8 +11,10 @@ namespace spos::lab1::version2 {
 	inline void Manager::StopRunningProcesses()
 	{
 		std::set<int>& s = running_processes;
-		for (int index : s)
+		for (int index : s) // send the signals to terminate
 			child_processes[index].terminate();
+		for (int index : s) // //to avoid a zombie process & get the exit code
+			child_processes[index].wait();
 		s.clear();
 	}
 	inline void Manager::PrintRunningProcesses()
@@ -85,7 +87,7 @@ namespace spos::lab1::version2 {
 	}
 	int Manager::ProcessComputationalResult(int index, int tmp_res)
 	{
-		cout << "Function " << index << ", res= " << tmp_res << endl;
+		//cout << "Function " << index << ", res= " << tmp_res << endl;
 		if (tmp_res == 0)
 		{
 			res = 0;
