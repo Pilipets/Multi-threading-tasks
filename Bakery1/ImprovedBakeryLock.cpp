@@ -34,6 +34,9 @@ namespace thread_sync {
 		_choosing[num] = false;
 
 		for (int j = 0; j < _n; ++j) {
+			while (_choosing[j]) {
+				std::this_thread::yield();
+			}
 			while (_number[j] != 0 && _number[j] < _number[num]) {
 				std::this_thread::yield();
 			}
