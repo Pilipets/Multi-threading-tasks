@@ -5,6 +5,7 @@ namespace thread_sync {
 		virtual void lock() = 0;
 		virtual void unlock() = 0;
 	};
+
 	class Lockable : public BasicLockable {
 	public:
 		virtual void try_lock() = 0;

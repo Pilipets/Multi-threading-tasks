@@ -18,9 +18,9 @@ namespace thread_sync {
 		void lock() override;
 		void unlock() override;
 	private:
-		bool* _choosing;
+		volatile bool* _choosing;
 		volatile uint64_t* _number;
-		int _n;
+		const int _n;
 		std::unordered_map<std::thread::id, int> _map_id;
 	};
 
@@ -34,9 +34,19 @@ namespace thread_sync {
 		void unlock() override;
 	private:
 		std::atomic<uint64_t> _ticket_counter;
-		bool* _choosing;
+		volatile bool* _choosing;
 		volatile uint64_t* _number;
-		int _n;
+		const int _n;
 		std::unordered_map<std::thread::id, int> _map_id;
+	};
+
+	class TicketLock : public BasicLockable {
+	public:
+		TicketLock();
+		~TicketLock() = default;
+		void lock() override;
+		void unlock() override;
+	private:
+		std::atomic<uint64_t> _ticket_counter, _now_serving;
 	};
 }

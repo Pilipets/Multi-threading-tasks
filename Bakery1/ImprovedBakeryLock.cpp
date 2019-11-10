@@ -17,20 +17,21 @@ namespace thread_sync {
 		_number = new uint64_t[n];
 		_map_id.reserve(n);
 
-		memset(_choosing, 0, n);
+		memset((void*)_choosing, 0, n);
 		memset((void*)_number, 0, n * sizeof(uint64_t));
 	}
 	ImprovedBakeryLock::~ImprovedBakeryLock()
 	{
-		_map_id.clear();
+		delete[] _choosing;
 		delete[] _number;
+		_map_id.clear();
 	}
 	void ImprovedBakeryLock::lock()
 	{
 		int num = _get_thread_num(std::this_thread::get_id());
 
 		_choosing[num] = true;
-		_number[num] = _ticket_counter.fetch_add(1);
+		_number[num] = _ticket_counter.fetch_add(1, std::memory_order_relaxed);
 		_choosing[num] = false;
 
 		for (int j = 0; j < _n; ++j) {

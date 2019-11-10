@@ -8,9 +8,9 @@ using namespace thread_sync;
 
 int main(int argc, char **argv)
 {
-	ImprovedBakeryLock lk;
+	ImprovedBakeryLock lk(80);
 
-	std::vector<std::thread> workers(36);
+	std::vector<std::thread> workers(80);
 	auto func = [&lk](int i) {
 		lk.lock();
 		std::cout << "Number" << i << std::endl;

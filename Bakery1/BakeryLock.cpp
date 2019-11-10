@@ -22,7 +22,7 @@ namespace thread_sync {
 		_number = new uint64_t[n];
 		_map_id.reserve(n);
 
-		memset(_choosing, 0, n);
+		memset((void*)_choosing, 0, n);
 		memset((void*)_number, 0, n * sizeof(uint64_t));
 	}
 	BakeryLock::~BakeryLock()
