@@ -28,7 +28,7 @@ namespace thread_sync {
 	{
 		int num = _get_thread_num(std::this_thread::get_id());
 		_choosing[num] = true;
-		_number[num] = 1 + _produce_ticket();
+		_number[num] = _produce_ticket();
 		_choosing[num] = false;
 
 		for (int j = 0; j < _n; ++j) {

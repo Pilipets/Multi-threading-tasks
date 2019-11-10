@@ -16,10 +16,10 @@ namespace thread_sync {
 		enum class Color: bool {
 			white, black
 		};
-		Color _shared_color;
-		Color *_my_color;
-		bool* _choosing;
-		int* _number;
+		volatile Color _shared_color;
+		volatile Color *_my_color;
+		volatile bool* _choosing;
+		volatile int* _number;
 		const int _n;
 	};
 }

@@ -4,13 +4,13 @@
 namespace thread_sync {
 	int BlackWhiteBakeryLock::_produce_ticket(int i)
 	{
-		int ticket = -1;
+		int ticket = 0;
 		for (int j = 0; j < _n; ++j) {
 			if (_my_color[i] == _my_color[j] &&
 				_number[j] > _number[i])
 				ticket = _number[j];
 		}
-		return ticket + 1;
+		return 1+ticket;
 	}
 	BlackWhiteBakeryLock::BlackWhiteBakeryLock(int n) :
 		_n(n)
@@ -21,9 +21,9 @@ namespace thread_sync {
 		_number = new int[n];
 		_map_id.reserve(n);
 
-		memset(_my_color, 0, n);
-		memset(_choosing, 0, n);
-		memset(_number, 0, n * sizeof(int));
+		memset((void*)_my_color, 0, n);
+		memset((void*)_choosing, 0, n);
+		memset((void*)_number, 0, n * sizeof(int));
 	}
 	BlackWhiteBakeryLock::~BlackWhiteBakeryLock()
 	{
@@ -38,8 +38,8 @@ namespace thread_sync {
 
 		_choosing[i] = true;
 		_my_color[i] = _shared_color;
-		_number[i] = 1 + _produce_ticket(i);
-		assert(_number[i] <= _n/3);
+		_number[i] = _produce_ticket(i);
+		assert(_number[i] <= _n);
 		_choosing[i] = false;
 
 		for (int j = 0; j < _n; ++j) {

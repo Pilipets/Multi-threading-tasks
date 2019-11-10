@@ -1,8 +1,8 @@
 #include "MyMutex.h"
 
 #include <algorithm>
-#include <cassert>
 #include <memory>
+
 namespace thread_sync {
 	ImprovedBakeryLock::ImprovedBakeryLock(int n) :
 		_n(n), _ticket_counter(0)
