@@ -1,18 +1,12 @@
 #include "MyMutex.h"
 
+#include <algorithm>
 #include <string.h>
 
 namespace thread_sync {
 	int BakeryLock::_produce_ticket()
 	{
-		int *vals = new int[_n];
-		memcpy(vals, _number, sizeof(int)*_n);
-		int ticket = vals[0];
-
-		for (int i = 0; i < _n; ++i)
-			if (vals[i] > ticket)
-				ticket = vals[i];
-		return ticket;
+		return 1 + *std::max_element(_number, _number + _n);
 	}
 	int BakeryLock::_get_thread_num(const std::thread::id & cur_id)
 	{
@@ -29,7 +23,13 @@ namespace thread_sync {
 		_map_id.reserve(n);
 
 		memset(_choosing, 0, n);
-		memset(_number, 0, n * sizeof(int));
+		memset((void*)_number, 0, n * sizeof(int));
+	}
+	BakeryLock::~BakeryLock()
+	{
+		delete[] _choosing;
+		delete[] _number;
+		_map_id.clear();
 	}
 	void BakeryLock::lock()
 	{
@@ -39,9 +39,13 @@ namespace thread_sync {
 		_choosing[num] = false;
 
 		for (int j = 0; j < _n; ++j) {
-			while (_choosing[j]);
-			while (_number[j] != 0 && (_number[j] < _number[num] || 
-				_number[j] == _number[num] && j < num));
+			while (_choosing[j]) {
+				std::this_thread::yield();
+			}
+			while (_number[j] != 0 && (_number[j] < _number[num] ||
+				_number[j] == _number[num] && j < num)) {
+				std::this_thread::yield();
+			}
 		}
 	}
 	void BakeryLock::unlock()
