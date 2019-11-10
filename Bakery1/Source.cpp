@@ -4,14 +4,21 @@
 #include <vector>
 
 #include "MyMutex.h"
+#include "MyImprovedMutex.h"
 using namespace thread_sync;
 
 int main(int argc, char **argv)
 {
-	ImprovedBakeryLock lk(80);
+	BlackWhiteBakeryLock lk(80);
 
-	std::vector<std::thread> workers(80);
+	std::vector<std::thread> workers(20);
 	auto func = [&lk](int i) {
+		lk.lock();
+		std::cout << "Number" << i << std::endl;
+		lk.unlock();
+		lk.lock();
+		std::cout << "Number" << i << std::endl;
+		lk.unlock();
 		lk.lock();
 		std::cout << "Number" << i << std::endl;
 		lk.unlock();

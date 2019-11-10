@@ -1,15 +1,9 @@
 #include "MyMutex.h"
 
 #include <algorithm>
+#include <cassert>
 #include <memory>
 namespace thread_sync {
-	int ImprovedBakeryLock::_get_thread_num(const std::thread::id & cur_id)
-	{
-		auto it = _map_id.find(cur_id);
-		if (it == _map_id.end())
-			it = _map_id.emplace(cur_id, _map_id.size()).first;
-		return it->second;
-	}
 	ImprovedBakeryLock::ImprovedBakeryLock(int n) :
 		_n(n), _ticket_counter(0)
 	{
@@ -38,9 +32,8 @@ namespace thread_sync {
 			while (_choosing[j]) {
 				std::this_thread::yield();
 			}
-			while (_number[j] != 0 && _number[j] < _number[num]) {
+			while (_number[j] != 0 && _number[j] < _number[num])
 				std::this_thread::yield();
-			}
 		}
 	}
 	void ImprovedBakeryLock::unlock()

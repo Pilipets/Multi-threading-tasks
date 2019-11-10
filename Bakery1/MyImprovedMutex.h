@@ -4,9 +4,9 @@
 
 #include "Concepts.h"
 namespace thread_sync {
-	class BlackWhiteBakeryLock : public BasicLockable {
+	class BlackWhiteBakeryLock : public BasicLockable, public ThreadMapping {
 	private:
-		int _get_thread_num(const std::thread::id& cur_id);
+		int _produce_ticket(int num);
 	public:
 		BlackWhiteBakeryLock(int n = 40);
 		~BlackWhiteBakeryLock();
@@ -18,8 +18,8 @@ namespace thread_sync {
 		};
 		Color _shared_color;
 		Color *_my_color;
+		bool* _choosing;
 		int* _number;
 		const int _n;
-		std::unordered_map<std::thread::id, int> _map_id;
 	};
 }

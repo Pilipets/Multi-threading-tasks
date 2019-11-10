@@ -8,10 +8,9 @@
 #include "Concepts.h"
 
 namespace thread_sync {
-	class BakeryLock : public BasicLockable{
+	class BakeryLock : public BasicLockable, public ThreadMapping {
 	private:
 		inline uint64_t _produce_ticket();
-		int _get_thread_num(const std::thread::id& cur_id);
 	public:
 		BakeryLock(int n = 40);
 		~BakeryLock();
@@ -21,12 +20,9 @@ namespace thread_sync {
 		volatile bool* _choosing;
 		volatile uint64_t* _number;
 		const int _n;
-		std::unordered_map<std::thread::id, int> _map_id;
 	};
 
-	class ImprovedBakeryLock : public BasicLockable {
-	private:
-		int _get_thread_num(const std::thread::id& cur_id);
+	class ImprovedBakeryLock : public BasicLockable, public ThreadMapping {
 	public:
 		ImprovedBakeryLock(int n = 40);
 		~ImprovedBakeryLock();
@@ -37,7 +33,6 @@ namespace thread_sync {
 		volatile bool* _choosing;
 		volatile uint64_t* _number;
 		const int _n;
-		std::unordered_map<std::thread::id, int> _map_id;
 	};
 
 	class TicketLock : public BasicLockable {

@@ -10,4 +10,15 @@ namespace thread_sync {
 	public:
 		virtual void try_lock() = 0;
 	};
+	
+	class ThreadMapping {
+	protected:
+		int _get_thread_num(const std::thread::id& cur_id) {
+			auto it = _map_id.find(cur_id);
+			if (it == _map_id.end())
+				it = _map_id.emplace(cur_id, _map_id.size()).first;
+			return it->second;
+		}
+		std::unordered_map<std::thread::id, int> _map_id;
+	};
 }
