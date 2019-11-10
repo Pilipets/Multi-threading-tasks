@@ -10,7 +10,7 @@
 namespace thread_sync {
 	class BakeryLock : public BasicLockable{
 	private:
-		inline int _produce_ticket();
+		inline uint64_t _produce_ticket();
 		int _get_thread_num(const std::thread::id& cur_id);
 	public:
 		BakeryLock(int n = 40);
@@ -19,13 +19,13 @@ namespace thread_sync {
 		void unlock() override;
 	private:
 		bool* _choosing;
-		volatile int* _number;
+		volatile uint64_t* _number;
 		int _n;
 		std::unordered_map<std::thread::id, int> _map_id;
 	};
+
 	class ImprovedBakeryLock : public BasicLockable {
 	private:
-		inline int _produce_ticket();
 		int _get_thread_num(const std::thread::id& cur_id);
 	public:
 		ImprovedBakeryLock(int n = 40);
@@ -33,7 +33,9 @@ namespace thread_sync {
 		void lock() override;
 		void unlock() override;
 	private:
-		std::atomic<int> *_number;
+		std::atomic<uint64_t> _ticket_counter;
+		bool* _choosing;
+		volatile uint64_t* _number;
 		int _n;
 		std::unordered_map<std::thread::id, int> _map_id;
 	};

@@ -4,7 +4,7 @@
 #include <string.h>
 
 namespace thread_sync {
-	int BakeryLock::_produce_ticket()
+	uint64_t BakeryLock::_produce_ticket()
 	{
 		return 1 + *std::max_element(_number, _number + _n);
 	}
@@ -15,15 +15,15 @@ namespace thread_sync {
 			it = _map_id.emplace(cur_id, _map_id.size()).first;
 		return it->second;
 	}
-	BakeryLock::BakeryLock(int n)
+	BakeryLock::BakeryLock(int n):
+		_n(n)
 	{
-		_n = n;
 		_choosing = new bool[n];
-		_number = new int[n];
+		_number = new uint64_t[n];
 		_map_id.reserve(n);
 
 		memset(_choosing, 0, n);
-		memset((void*)_number, 0, n * sizeof(int));
+		memset((void*)_number, 0, n * sizeof(uint64_t));
 	}
 	BakeryLock::~BakeryLock()
 	{

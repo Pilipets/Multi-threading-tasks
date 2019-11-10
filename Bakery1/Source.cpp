@@ -8,8 +8,7 @@ using namespace thread_sync;
 
 int main(int argc, char **argv)
 {
-	BakeryLock lk;
-	//std::mutex lk;
+	ImprovedBakeryLock lk;
 
 	std::vector<std::thread> workers(36);
 	auto func = [&lk](int i) {
