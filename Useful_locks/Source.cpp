@@ -16,14 +16,14 @@ int main(int argc, char **argv)
 }
 
 void test2(int n) {
-	ImprovedBakeryLock lk;
+	BlackWhiteBakeryLock lk;
 
 	std::vector<std::thread> workers(n);
 	auto func = [&lk](int i) {
-		lk.lock();
+		lk.lock(i);
 
 		std::cout << "Number" << i << std::endl;
-		lk.unlock();
+		lk.unlock(i);
 	};
 
 	for (int i = 0; i < n; ++i) {
@@ -39,17 +39,17 @@ void test1(int n) {
 
 	std::vector<std::thread> workers(n);
 	auto func = [&lk](int i) {
-		lk.lock();
+		lk.lock(i);
 		std::cout << "Number" << i << std::endl;
-		lk.unlock();
+		lk.unlock(i);
 		//std::this_thread::sleep_for(std::chrono::milliseconds(400));
-		lk.lock();
+		lk.lock(i);
 		std::cout << "Number" << i << std::endl;
-		lk.unlock();
-		lk.lock();
+		lk.unlock(i);
+		lk.lock(i);
 		//std::this_thread::sleep_for(std::chrono::milliseconds(200));
 		std::cout << "Number" << i << std::endl;
-		lk.unlock();
+		lk.unlock(i);
 	};
 
 	for (int i = 0; i < n; ++i) {

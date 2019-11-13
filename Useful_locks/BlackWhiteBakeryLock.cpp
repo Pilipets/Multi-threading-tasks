@@ -17,16 +17,16 @@ namespace thread_sync {
 	BlackWhiteBakeryLock::BlackWhiteBakeryLock() :
 		_n(NUM_THREADS)
 	{
-		_my_color = std::make_unique<volatile bool*>(_n);
-		_choosing = std::make_unique<volatile bool*>(_n);
-		_number = std::make_unique<volatile int*>(_n);
+		_my_color = std::make_unique<volatile bool[]>(_n);
+		_choosing = std::make_unique<volatile bool[]>(_n);
+		_number = std::make_unique<volatile int[]>(_n);
 
 		memset((void*)_choosing.get(), 0, _n);
 		memset((void*)_number.get(), 0, _n * sizeof(int));
 
 		//_shared_color, _my_color arbitrary initial values
 	}
-	bool BlackWhiteBakeryLock::try_lock()
+	bool BlackWhiteBakeryLock::try_lock(int i)
 	{
 		_choosing[i] = true;
 		_my_color[i] = _shared_color;
@@ -54,10 +54,10 @@ namespace thread_sync {
 
 		}
 		if (!acquired)
-			unlock();
+			unlock(i);
 		return acquired;
 	}
-	void BlackWhiteBakeryLock::lock()
+	void BlackWhiteBakeryLock::lock(int i)
 	{
 		_choosing[i] = true;
 		_my_color[i] = _shared_color;
@@ -82,7 +82,7 @@ namespace thread_sync {
 
 		}
 	}
-	void BlackWhiteBakeryLock::unlock()
+	void BlackWhiteBakeryLock::unlock(int num)
 	{
 		_shared_color = ~_my_color[num];
 		_number[num] = 0;

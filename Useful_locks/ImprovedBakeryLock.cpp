@@ -2,16 +2,14 @@
 
 #include <algorithm>
 
-const int thread_sync::NUM_THREADS = 40;
-
 namespace thread_sync {
 	ImprovedBakeryLock::ImprovedBakeryLock() :
 		_n(NUM_THREADS), _ticket_counter(1)
 	{
-		_token = std::make_unique<volatile uint64_t*>(_n);
+		_token = std::make_unique<volatile uint64_t[]>(_n);
 		memset((void*)_token.get(), 0, _n * sizeof(uint64_t));
 	}
-	bool ImprovedBakeryLock::try_lock()
+	bool ImprovedBakeryLock::try_lock(int num)
 	{
 		_token[num] = _ticket_counter.fetch_add(1, std::memory_order_relaxed);
 
@@ -22,10 +20,10 @@ namespace thread_sync {
 			}
 		}
 		if (!acquired)
-			unlock();
+			unlock(num);
 		return acquired;
 	}
-	void ImprovedBakeryLock::lock()
+	void ImprovedBakeryLock::lock(int num)
 	{
 		_token[num] = _ticket_counter.fetch_add(1, std::memory_order_relaxed);
 
@@ -34,7 +32,7 @@ namespace thread_sync {
 				std::this_thread::yield();
 		}
 	}
-	void ImprovedBakeryLock::unlock()
+	void ImprovedBakeryLock::unlock(int num)
 	{
 		_token[num] = 0;
 	}
