@@ -6,16 +6,18 @@ namespace thread_sync {
 	{
 		int ticket = 0;
 		for (int j = 0; j < _n; ++j) {
-			if (_my_color[i] == _my_color[j] &&
-				_number[j] > _number[i])
-				ticket = _number[j];
+			Color color = _my_color[j];
+			int var = _number[j];
+			if (_my_color[i] == color &&
+				var > _number[i])
+				ticket = var;
 		}
 		return 1+ticket;
 	}
 	BlackWhiteBakeryLock::BlackWhiteBakeryLock(int n) :
 		_n(n)
 	{
-		_shared_color = Color::white;
+		_shared_color = Color::white; 
 		_my_color = new Color[n];
 		_choosing = new bool[n];
 		_number = new int[n];
