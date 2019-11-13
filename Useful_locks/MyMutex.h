@@ -12,8 +12,8 @@ namespace thread_sync {
 	public:
 		ImprovedBakeryLock();
 		~ImprovedBakeryLock() = default;
-		void lock() override;
 		bool try_lock() override;
+		void lock() override;
 		void unlock() override;
 	private:
 		std::atomic<uint64_t> _ticket_counter;
@@ -21,22 +21,20 @@ namespace thread_sync {
 		const int _n;
 	};
 
-	class BlackWhiteBakeryLock : public BasicLockable {
+	class BlackWhiteBakeryLock : public Lockable {
 	private:
 		int _produce_ticket(int num);
 	public:
 		BlackWhiteBakeryLock();
-		~BlackWhiteBakeryLock();
+		~BlackWhiteBakeryLock() = default;
+		bool try_lock() override;
 		void lock() override;
 		void unlock() override;
 	private:
-		enum class Color : bool {
-			white, black
-		};
-		volatile Color _shared_color;
-		volatile Color *_my_color;
-		volatile bool* _choosing;
-		volatile int* _number;
+		volatile bool _shared_color;
+		std::unique_ptr<volatile bool*> _my_color;
+		std::unique_ptr<volatile bool*> _choosing;
+		std::unique_ptr<volatile int*> _number;
 		const int _n;
 	};
 }

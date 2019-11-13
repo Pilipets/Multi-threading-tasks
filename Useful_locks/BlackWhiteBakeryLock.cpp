@@ -6,7 +6,7 @@ namespace thread_sync {
 	{
 		int ticket = 0;
 		for (int j = 0; j < _n; ++j) {
-			Color color = _my_color[j];
+			bool color = _my_color[j];
 			int var = _number[j];
 			if (_my_color[i] == color &&
 				var > _number[i])
@@ -17,20 +17,45 @@ namespace thread_sync {
 	BlackWhiteBakeryLock::BlackWhiteBakeryLock() :
 		_n(NUM_THREADS)
 	{
-		_shared_color = Color::white;
-		_my_color = new Color[_n];
-		_choosing = new bool[_n];
-		_number = new int[_n];
+		_my_color = std::make_unique<volatile bool*>(_n);
+		_choosing = std::make_unique<volatile bool*>(_n);
+		_number = std::make_unique<volatile int*>(_n);
 
-		memset((void*)_my_color, 0, _n);
-		memset((void*)_choosing, 0, _n);
-		memset((void*)_number, 0, _n * sizeof(int));
+		memset((void*)_choosing.get(), 0, _n);
+		memset((void*)_number.get(), 0, _n * sizeof(int));
+
+		//_shared_color, _my_color arbitrary initial values
 	}
-	BlackWhiteBakeryLock::~BlackWhiteBakeryLock()
+	bool BlackWhiteBakeryLock::try_lock()
 	{
-		delete[] _my_color;
-		delete[] _choosing;
-		delete[] _number;
+		_choosing[i] = true;
+		_my_color[i] = _shared_color;
+		_number[i] = _produce_ticket(i);
+		assert(_number[i] <= _n);
+		_choosing[i] = false;
+
+		bool acquired = true;
+		for (int j = 0; j < _n; ++j) {
+			if(_choosing[j]) {
+				acquired = false; break;
+			}
+			if (_my_color[j] == _my_color[i]) {
+				if (_number[j] != 0 && _my_color[j] == _my_color[i] &&
+					(_number[j] < _number[i] || _number[j] == _number[i] && j < i)) {
+					acquired = false; break;
+				}
+			}
+			else {
+				if (_number[j] != 0 && _my_color[j] != _my_color[i] &&
+					_my_color[i] == _shared_color) {
+					acquired = false; break;
+				}
+			}
+
+		}
+		if (!acquired)
+			unlock();
+		return acquired;
 	}
 	void BlackWhiteBakeryLock::lock()
 	{
@@ -59,7 +84,7 @@ namespace thread_sync {
 	}
 	void BlackWhiteBakeryLock::unlock()
 	{
-		_shared_color = _my_color[num] == Color::black ? Color::white : Color::black;
+		_shared_color = ~_my_color[num];
 		_number[num] = 0;
 	}
 }
