@@ -11,13 +11,13 @@ namespace thread_sync {
 	class ImprovedBakeryLock : public Lockable {
 	public:
 		ImprovedBakeryLock();
-		~ImprovedBakeryLock() = default;
+		~ImprovedBakeryLock();
 		bool try_lock(int i) override;
 		void lock(int i) override;
 		void unlock(int i) override;
 	private:
 		std::atomic<uint64_t> _ticket_counter;
-		std::unique_ptr<volatile uint64_t[]> _token;
+		volatile uint64_t* _token;
 		const int _n;
 	};
 
@@ -26,15 +26,15 @@ namespace thread_sync {
 		int _produce_ticket(int num);
 	public:
 		BlackWhiteBakeryLock();
-		~BlackWhiteBakeryLock() = default;
+		~BlackWhiteBakeryLock();
 		bool try_lock(int i) override;
 		void lock(int i) override;
 		void unlock(int i) override;
 	private:
 		volatile bool _shared_color;
-		std::unique_ptr<volatile bool[]> _my_color;
-		std::unique_ptr<volatile bool[]> _choosing;
-		std::unique_ptr<volatile int[]> _number;
+		volatile bool* _my_color;
+		volatile bool* _choosing;
+		volatile int* _number;
 		const int _n;
 	};
 }

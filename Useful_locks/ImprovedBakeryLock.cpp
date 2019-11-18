@@ -6,8 +6,12 @@ namespace thread_sync {
 	ImprovedBakeryLock::ImprovedBakeryLock() :
 		_n(NUM_THREADS), _ticket_counter(1)
 	{
-		_token = std::make_unique<volatile uint64_t[]>(_n);
-		memset((void*)_token.get(), 0, _n * sizeof(uint64_t));
+		_token = new volatile uint64_t[_n];
+		memset((void*)_token, 0, _n * sizeof(uint64_t));
+	}
+	ImprovedBakeryLock::~ImprovedBakeryLock()
+	{
+		delete[] _token;
 	}
 	bool ImprovedBakeryLock::try_lock(int num)
 	{

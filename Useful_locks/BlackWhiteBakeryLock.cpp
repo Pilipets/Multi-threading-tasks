@@ -17,14 +17,20 @@ namespace thread_sync {
 	BlackWhiteBakeryLock::BlackWhiteBakeryLock() :
 		_n(NUM_THREADS)
 	{
-		_my_color = std::make_unique<volatile bool[]>(_n);
-		_choosing = std::make_unique<volatile bool[]>(_n);
-		_number = std::make_unique<volatile int[]>(_n);
+		_my_color = new volatile bool[_n];
+		_choosing = new volatile bool[_n];
+		_number = new volatile int[_n];
 
-		memset((void*)_choosing.get(), 0, _n);
-		memset((void*)_number.get(), 0, _n * sizeof(int));
+		memset((void*)_choosing, 0, _n);
+		memset((void*)_number, 0, _n * sizeof(int));
 
 		//_shared_color, _my_color arbitrary initial values
+	}
+	BlackWhiteBakeryLock::~BlackWhiteBakeryLock()
+	{
+		delete[] _my_color;
+		delete[] _choosing;
+		delete[] _number;
 	}
 	bool BlackWhiteBakeryLock::try_lock(int i)
 	{
