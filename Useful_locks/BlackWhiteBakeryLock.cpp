@@ -1,6 +1,6 @@
 #include "MyMutex.h"
 
-#include <cassert>
+//#include <cassert>
 namespace thread_sync {
 	int BlackWhiteBakeryLock::_produce_ticket(int i)
 	{
@@ -17,9 +17,9 @@ namespace thread_sync {
 	BlackWhiteBakeryLock::BlackWhiteBakeryLock() :
 		_n(NUM_THREADS)
 	{
-		_my_color = new volatile bool[_n];
-		_choosing = new volatile bool[_n];
-		_number = new volatile int[_n];
+		_my_color = new bool[_n];
+		_choosing = new bool[_n];
+		_number = new int[_n];
 
 		memset((void*)_choosing, 0, _n);
 		memset((void*)_number, 0, _n * sizeof(int));
@@ -37,7 +37,7 @@ namespace thread_sync {
 		_choosing[i] = true;
 		_my_color[i] = _shared_color;
 		_number[i] = _produce_ticket(i);
-		assert(_number[i] <= _n);
+		//assert(_number[i] <= _n);
 		_choosing[i] = false;
 
 		bool acquired = true;
@@ -68,7 +68,7 @@ namespace thread_sync {
 		_choosing[i] = true;
 		_my_color[i] = _shared_color;
 		_number[i] = _produce_ticket(i);
-		assert(_number[i] <= _n);
+		//assert(_number[i] <= _n);
 		_choosing[i] = false;
 
 		for (int j = 0; j < _n; ++j) {
