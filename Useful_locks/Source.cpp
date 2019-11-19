@@ -16,7 +16,7 @@ int main(int argc, char **argv)
 }
 
 void test2(int n) {
-	BlackWhiteBakeryLock lk;
+	ImprovedBakeryLock lk;
 
 	std::vector<std::thread> workers(n);
 	auto func = [&lk](int i) {

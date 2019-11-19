@@ -18,6 +18,7 @@ namespace thread_sync {
 	private:
 		std::atomic<uint64_t> _ticket_counter;
 		volatile uint64_t* _token;
+		volatile bool* _choosing;
 		const int _n;
 	};
 
