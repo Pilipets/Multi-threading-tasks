@@ -90,7 +90,7 @@ namespace thread_sync {
 	}
 	void BlackWhiteBakeryLock::unlock(int num)
 	{
-		_shared_color = ~_my_color[num];
+		_shared_color = !_my_color[num];
 		_number[num] = 0;
 	}
 }
