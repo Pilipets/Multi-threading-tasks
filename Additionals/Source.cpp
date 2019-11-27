@@ -12,13 +12,13 @@ void test2(int n = 5);
 void test3(int n);
 int main(int argc, char **argv)
 {
-	test2(30);
+	test3(30);
 	system("pause");
 	return 0;
 }
 
 void test3(int n) {
-	TicketLock lk;
+	TicketLock lk(40);
 
 	int var = 0;
 	std::vector<std::thread> workers(n);
