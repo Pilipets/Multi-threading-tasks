@@ -4,21 +4,21 @@
 #include <vector>
 
 #include "MyMutex.h"
-#include "MyMutex.h"
 using namespace thread_sync;
+using namespace std::chrono_literals;
 
 void test1(int n = 20);
 void test2(int n = 5);
 void test3(int n);
 int main(int argc, char **argv)
 {
-	test3(30);
+	test2(30);
 	system("pause");
 	return 0;
 }
 
 void test3(int n) {
-	TicketLock lk(40);
+	TicketLock lk(n);
 
 	int var = 0;
 	std::vector<std::thread> workers(n);
@@ -49,15 +49,17 @@ void test3(int n) {
 	std::cout << var << std::endl;
 }
 void test2(int n) {
-	TicketLock lk;
+	TicketLock lk(n);
 
 	std::vector<std::thread> workers(n);
 	auto func = [&lk](int i) {
 		if (lk.try_lock()){
 			std::cout << "Try_Lock_Number" << i << std::endl;
 			lk.unlock();
+			std::this_thread::sleep_for(i * 3ms);
 		}
 		else {
+			std::this_thread::sleep_for(i*2ms);
 			lk.lock();
 			std::cout << "Lock_Number" << i << std::endl;
 			lk.unlock();
@@ -76,7 +78,7 @@ void test2(int n) {
 	}
 }
 void test1(int n) {
-	TicketLock lk;
+	TicketLock lk(n);
 
 	std::vector<std::thread> workers(n);
 	auto func = [&lk](int i) {
