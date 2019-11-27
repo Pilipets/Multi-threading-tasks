@@ -35,11 +35,12 @@ namespace thread_sync {
 		const int _n;
 	};
 
-	class TicketLock : public BasicLockable {
+	class TicketLock : public Lockable {
 	public:
 		TicketLock();
 		~TicketLock() = default;
 		void lock() override;
+		void try_lock() override;
 		void unlock() override;
 	private:
 		std::atomic<uint64_t> _ticket_counter, _now_serving;

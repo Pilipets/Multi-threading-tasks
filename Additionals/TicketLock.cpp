@@ -12,15 +12,14 @@ namespace thread_sync {
 			std::this_thread::yield();
 		}
 	}
-	void TicketLock::try_lock()
+	bool TicketLock::try_lock()
 	{
-		const auto ticket = _ticket_counter.fetch_add(1, std::memory_order_relaxed);
-		bool acquired = true;
-		if(_now_serving.load(std::memory_order_acquire) != ticket){
-			acquired = false;
-		}
-		if(!acquired)
-			unlock();
+		auto cur_ticket = _now_serving.load(std::memory_order_acquire);
+		bool acquired = false;
+		if (_ticket_counter.compare_exchange_weak(cur_ticket, cur_ticket + 1, std::memory_order_release, std::memory_order_relaxed))
+			acquired = true;
+
+		return acquired;
 	}
 	void TicketLock::unlock()
 	{
