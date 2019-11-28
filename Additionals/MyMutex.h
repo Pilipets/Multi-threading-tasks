@@ -1,9 +1,6 @@
 #pragma once
 #include <atomic>
 #include <cstdint>
-#include <thread>
-#include <unordered_map>
-#include <vector>
 
 #include "Concepts.h"
 	

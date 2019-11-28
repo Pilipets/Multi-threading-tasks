@@ -1,5 +1,6 @@
 #include "MyMutex.h"
 
+#include <thread>
 #include "debug.h"
 
 #ifdef DEBUG
@@ -36,8 +37,8 @@ namespace thread_sync {
 	}
 	bool TicketLock::try_lock()
 	{
-		auto cur_ticket = _now_serving.load(std::memory_order_acquire);
 		bool acquired = false;
+		auto cur_ticket = _now_serving.load(std::memory_order_acquire);
 		if (_ticket_counter.compare_exchange_weak(cur_ticket, _bound_ticket(cur_ticket + 1), std::memory_order_release, std::memory_order_relaxed))
 			acquired = true;
 
