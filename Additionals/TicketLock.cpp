@@ -6,14 +6,20 @@
 #include <cassert>
 #endif
 
+
 namespace thread_sync {
-	inline uint64_t TicketLock::_bound_ticket(uint64_t ticket_value)
+	// _max_waiting variable and _bound_ticket() method can 
+	// be deleted as in C++ after overflowing unsigned integer turns into a zero
+	// But they are left here for consistency
+	inline uint32_t TicketLock::_bound_ticket(uint32_t ticket_value)
 	{
+		// overflow is safe, as long as the number of threads using the lock is less 
+		// than or equal to the value range representable by the counter’s underlying integer type
 		if (_max_waiting > 0)
 			ticket_value %= _max_waiting;
 		return ticket_value;
 	}
-	TicketLock::TicketLock(int max_waiting) :
+	TicketLock::TicketLock(uint32_t max_waiting) :
 		_ticket_counter(0), _now_serving(0), _max_waiting(max_waiting)
 	{}
 
@@ -21,7 +27,7 @@ namespace thread_sync {
 	{
 		const auto ticket = _bound_ticket(_ticket_counter.fetch_add(1, std::memory_order_relaxed));
 		#ifdef DEBUG
-		if(_max_waiting != -1)
+		if(_max_waiting > 0)
 			assert(ticket < _max_waiting);
 		#endif
 		while (_now_serving.load(std::memory_order_acquire) != ticket) {
