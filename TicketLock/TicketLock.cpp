@@ -12,7 +12,7 @@ namespace thread_sync {
 	// _max_waiting variable and _bound_ticket() method can 
 	// be deleted as in C++ after overflowing unsigned integer turns into a zero
 	// But they are left here for consistency
-	inline uint32_t TicketLock::_bound_ticket(uint32_t ticket_value)
+	inline uint32_t TicketLock::_bound_ticket(uint32_t ticket_value) const
 	{
 		// overflow is safe, as long as the number of threads using the lock is less 
 		// than or equal to the value range representable by the counter’s underlying integer type
