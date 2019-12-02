@@ -27,9 +27,6 @@ public class sProcess implements Comparable{
     this.arrivalTime = arrivalTime;
     this.id = counter++;
   }
-  /*public void updateResponseRatio(int numTasks, int compTime){
-    this.responseRatio = this.cpudone*(float)numTasks/(compTime-this.arrivalTime);
-  }*/
   @Override
   public int compareTo(Object o) {
     sProcess other = (sProcess)o;
