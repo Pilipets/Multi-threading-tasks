@@ -1,7 +1,6 @@
 package scheduling_simulator.utils;
 
 import java.io.PrintStream;
-import java.util.Vector;
 
 public class ProcessInfoPrinter {
     public enum Status{

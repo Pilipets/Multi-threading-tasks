@@ -1,6 +1,6 @@
 package scheduling_simulator.utils;
 
-public class sProcess implements Comparable{
+public class sProcess{
   private static int counter = 0;
   public int cputime;
   public int ioblocking;
@@ -26,21 +26,5 @@ public class sProcess implements Comparable{
     this.ioblocking = ioblocking;
     this.arrivalTime = arrivalTime;
     this.id = counter++;
-  }
-  public void updateResponseRatio(int numThreads, int compTime){
-    int waitingTime = compTime - arrivalTime;
-    if(waitingTime < 0 || cpudone == cputime)
-      responseRatio = Integer.MAX_VALUE;
-    else if(waitingTime == 0){
-      responseRatio = 0;
-    }
-    else{
-      responseRatio = cpudone*numThreads/(float)waitingTime;
-    }
-  }
-  @Override
-  public int compareTo(Object o) {
-    sProcess other = (sProcess)o;
-    return Float.compare(this.responseRatio, other.responseRatio);
   }
 }

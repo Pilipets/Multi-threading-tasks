@@ -11,7 +11,6 @@ package scheduling_simulator;
 
 import scheduling_simulator.algo.SchedulingAlgorithm;
 import scheduling_simulator.parsing.Common;
-import scheduling_simulator.utils.ProcessInfoPrinter;
 import scheduling_simulator.utils.Results;
 import scheduling_simulator.utils.sProcess;
 
@@ -115,7 +114,7 @@ public class Scheduling {
     Init(config_path);
 
     if (processVector.size() < processnum) {
-      i = 1;
+      i = 0;
       while (processVector.size() < processnum) {       
           double X = Common.R1();
           while (X == -1.0) {
