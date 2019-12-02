@@ -26,23 +26,12 @@ public class sProcess implements Comparable{
     this.ioblocking = ioblocking;
     this.arrivalTime = arrivalTime;
   }
-  public void updateResponseRatio(int numTasks, int compTime){
+  /*public void updateResponseRatio(int numTasks, int compTime){
     this.responseRatio = this.cpudone*(float)numTasks/(compTime-this.arrivalTime);
-  }
+  }*/
   @Override
   public int compareTo(Object o) {
     sProcess other = (sProcess)o;
-    if(this.responseRatio <= 0 && other.responseRatio <= 0){
-      return 0;
-    }
-    else if(this.responseRatio > 0 && other.responseRatio > 0) {
-      return Float.compare(this.responseRatio, other.responseRatio);
-    }
-    else if(this.responseRatio <= 0) {
-      return -1;
-    }
-    else if(other.responseRatio <= 0) {
-      return 1;
-    }
+    return Float.compare(this.responseRatio, other.responseRatio);
   }
 }

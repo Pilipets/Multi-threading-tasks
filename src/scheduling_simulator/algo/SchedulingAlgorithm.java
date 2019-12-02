@@ -20,32 +20,41 @@ public class SchedulingAlgorithm {
 
     HRRNScheduler scheduler = new HRRNScheduler(processVector, runTime);
     int compTime = 0;
-    boolean takeNewProcess = false;
     try {
       PrintStream out = new PrintStream(new FileOutputStream(resultsFile));
+      sProcess curProcess = scheduler.getNextProcess(compTime);
       while (compTime < runTime) {
-        sProcess curProcess = scheduler.getNextProcess();
-        if (curProcess.cpudone == curProcess.cputime) {
-          scheduler.markCompletedOne(curProcess);
-          ProcessInfoPrinter.print(out, curProcess, ProcessInfoPrinter.Status.Completed);
-          takeNewProcess = true;
-          if(scheduler.isEmpty()){
-            result.compuTime = compTime;
-            out.close();
-            return result;
-          }
-        }      
-        else if (curProcess.ioblocking == curProcess.ionext) {
-          scheduler.markBlockedOne(curProcess);
-          ProcessInfoPrinter.print(out, curProcess, ProcessInfoPrinter.Status.Blocked);
-          takeNewProcess = true;
-        }
-        else{
-          ProcessInfoPrinter.print(out, curProcess, ProcessInfoPrinter.Status.Registered);
-          takeNewProcess = false;
+        while (compTime < runTime && curProcess == null) {
+          compTime++;
+          curProcess = scheduler.getNextProcess(compTime);
         }
 
-        if(!takeNewProcess){
+        if(compTime != runTime)
+          ProcessInfoPrinter.print(out, curProcess, ProcessInfoPrinter.Status.Registered);
+        while (compTime < runTime && curProcess != null) {
+          boolean takeNewProcess = false;
+          if (curProcess.cpudone == curProcess.cputime) {
+            scheduler.markCompletedOne(curProcess);
+            ProcessInfoPrinter.print(out, curProcess, ProcessInfoPrinter.Status.Completed);
+            if (scheduler.isEmpty()) {
+              result.compuTime = compTime;
+              out.close();
+              return result;
+            }
+            takeNewProcess = true;
+          }
+          if (curProcess.ioblocking == curProcess.ionext) {
+            scheduler.markBlockedOne(curProcess);
+            ProcessInfoPrinter.print(out, curProcess, ProcessInfoPrinter.Status.Blocked);
+            takeNewProcess = true;
+          }
+
+          if(takeNewProcess){
+            curProcess = scheduler.getNextProcess(compTime);
+            if(curProcess == null)
+              break;
+            ProcessInfoPrinter.print(out, curProcess, ProcessInfoPrinter.Status.Registered);
+          }
           scheduler.updateRunning(curProcess);
           compTime++;
         }

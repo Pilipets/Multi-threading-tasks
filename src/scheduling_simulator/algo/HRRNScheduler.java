@@ -11,8 +11,7 @@ public class HRRNScheduler {
     private int numTasks;
     private int maxTime;
     private int completedTasks = 0;
-    private int compTime = 0;
-    private sProcess curProcess = null, nextProcess = null;
+    private sProcess curProcess = null;
 
     public HRRNScheduler(Vector<sProcess> processVector, int maxTime){
         this.pVec = processVector;
@@ -24,7 +23,7 @@ public class HRRNScheduler {
         Collections.sort(pVec, new Comparator<sProcess>() {
                     @Override
                     public int compare(sProcess p1, sProcess p2) {
-                        return p1.compareTo(p2);
+                        return Integer.compare(p1.arrivalTime, p2.arrivalTime);
                     }
                 }
         );
@@ -32,7 +31,6 @@ public class HRRNScheduler {
     public void markCompletedOne(sProcess p){
         completedTasks += 1;
         pVec.remove(p);
-        curProcess = null;
     }
     public boolean isEmpty(){
         return completedTasks == numTasks;
@@ -45,27 +43,17 @@ public class HRRNScheduler {
         p.cpudone += 1;
         if(p.ioblocking > 0)
             p.ionext += 1;
-        compTime += 1;
     }
-    public sProcess getNextProcess(){
-        if(curProcess == null){
-            curProcess = pVec.get(0);
-            if(pVec.size() > 1)
-                nextProcess = pVec.get(1);
-        }
-        else{
-            curProcess.updateResponseRatio(numTasks, compTime);
-            if(curProcess.compareTo(nextProcess) == 1){
-                Collections.sort(pVec, new Comparator<sProcess>() {
-                            @Override
-                            public int compare(sProcess p1, sProcess p2) {
-                                return p1.compareTo(p2);
-                            }
-                        }
-                );
-                curProcess = pVec.get(0);
-                if(pVec.size() > 1)
-                    nextProcess = pVec.get(1);
+    public sProcess getNextProcess(int compTime){
+        float hrr = Integer.MIN_VALUE;
+        for(sProcess p: pVec){
+            if(p.arrivalTime <= compTime && p != curProcess){
+                float temp = (p.cputime + compTime - p.arrivalTime)/(float)p.cputime;
+                p.responseRatio = temp;
+                if(hrr < temp){
+                    hrr = temp;
+                    curProcess = p;
+                }
             }
         }
         return curProcess;
