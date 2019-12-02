@@ -2,18 +2,17 @@ package scheduling_simulator.algo;
 
 import scheduling_simulator.utils.sProcess;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Vector;
+import java.lang.reflect.Array;
+import java.util.*;
 
 public class HRRNScheduler {
-    private Vector<sProcess> pVec;
+    private List<sProcess> pVec;
     private int numTasks;
     private int completedTasks = 0;
     private sProcess curProcess = null;
 
     public HRRNScheduler(Vector<sProcess> processVector){
-        this.pVec = processVector;
+        this.pVec = new LinkedList<>(processVector);
         this.numTasks = processVector.size();
         init();
     }
@@ -28,6 +27,7 @@ public class HRRNScheduler {
     }
     public void markCompletedOne(sProcess p){
         completedTasks += 1;
+        pVec.remove(p);
     }
     public boolean isEmpty(){
         return completedTasks == numTasks;
@@ -40,9 +40,6 @@ public class HRRNScheduler {
         p.cpudone += 1;
         if(p.ioblocking > 0)
             p.ionext += 1;
-    }
-    public Vector<sProcess> getTasks(){
-        return pVec;
     }
     public sProcess getNextProcess(int compTime){
         float hrr = Integer.MIN_VALUE;

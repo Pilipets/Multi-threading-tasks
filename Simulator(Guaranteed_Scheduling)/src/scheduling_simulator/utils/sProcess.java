@@ -1,6 +1,6 @@
 package scheduling_simulator.utils;
 
-public class sProcess implements Comparable{
+public class sProcess{
   private static int counter = 0;
   public int cputime;
   public int ioblocking;
@@ -26,10 +26,5 @@ public class sProcess implements Comparable{
     this.ioblocking = ioblocking;
     this.arrivalTime = arrivalTime;
     this.id = counter++;
-  }
-  @Override
-  public int compareTo(Object o) {
-    sProcess other = (sProcess)o;
-    return Float.compare(this.responseRatio, other.responseRatio);
   }
 }
