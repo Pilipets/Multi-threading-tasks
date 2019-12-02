@@ -1,32 +1,26 @@
-package scheduling_simulator.utils;
+package scheduling_simulator.utils.process;
 
-public class sProcess implements Comparable{
+public class sProcess extends Process implements Comparable {
   private static int counter = 0;
-  public int cputime;
-  public int ioblocking;
-  public int cpudone = 0;
-  public int ionext = 0;
-  public int numblocked = 0;
+  public int id;
   public int arrivalTime = 0;
   public float responseRatio = 0;
-  public int id;
-  public sProcess(){
+  public float wt,tt,ntt;
 
-  }
   public sProcess (int cputime, int ioblocking, int cpudone, int ionext, int numblocked) {
-    this.cputime = cputime;
-    this.ioblocking = ioblocking;
-    this.cpudone = cpudone;
-    this.ionext = ionext;
-    this.numblocked = numblocked;
+    super(cputime, ioblocking, cpudone, ionext, numblocked);
     this.id = counter++;
   }
   public sProcess (int cputime, int ioblocking, int arrivalTime) {
-    this.cputime = cputime;
-    this.ioblocking = ioblocking;
+    super(cputime, ioblocking, 0,0,0);
     this.arrivalTime = arrivalTime;
     this.id = counter++;
   }
+
+  public sProcess() {
+    super();
+  }
+
   public void updateResponseRatio(int numThreads, int compTime){
     int waitingTime = compTime - arrivalTime;
     if(waitingTime < 0 || cpudone == cputime)

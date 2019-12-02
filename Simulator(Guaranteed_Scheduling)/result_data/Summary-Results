@@ -1,13 +1,15 @@
 Scheduling Type: Batch (Nonpreemptive)
 Scheduling Name: Guaranteed Scheduling
-Simulation Run Time: 5000
-Mean: 1100
-Standard Deviation: 510
+Simulation Run Time: 6795
+Avarage Turn Around Time: 4563.5713
+Avarage Waiting Time: 3592.8572
+Mean: 700
+Standard Deviation: 245
 Process #	CPU Time	IO Blocking	CPU Completed	CPU Blocked
-0		1879 (ms)	100 (ms)	1204 (ms)	12 times
-1		1879 (ms)	500 (ms)	614 (ms)	1 times
-2		1879 (ms)	30 (ms)		1106 (ms)	36 times
-3		1879 (ms)	250 (ms)	246 (ms)	0 times
-4		610 (ms)	100 (ms)	610 (ms)	6 times
-5		610 (ms)	200 (ms)	610 (ms)	3 times
-6		610 (ms)	300 (ms)	610 (ms)	2 times
+0		1038 (ms)	100 (ms)	1038 (ms)	10 times
+1		1038 (ms)	500 (ms)	1038 (ms)	2 times
+2		1038 (ms)	30 (ms)		1038 (ms)	34 times
+3		1038 (ms)	250 (ms)	1038 (ms)	4 times
+4		881 (ms)	100 (ms)	881 (ms)	8 times
+5		881 (ms)	200 (ms)	881 (ms)	4 times
+6		881 (ms)	300 (ms)	881 (ms)	2 times

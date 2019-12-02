@@ -12,8 +12,8 @@ package scheduling_simulator;
 import scheduling_simulator.algo.SchedulingAlgorithm;
 import scheduling_simulator.parsing.Common;
 import scheduling_simulator.utils.ProcessInfoPrinter;
-import scheduling_simulator.utils.Results;
-import scheduling_simulator.utils.sProcess;
+import scheduling_simulator.utils.process.sProcess;
+import scheduling_simulator.utils.results.Results;
 
 import java.io.*;
 import java.util.*;
@@ -134,6 +134,8 @@ public class Scheduling {
       out.println("Scheduling Type: " + result.schedulingType);
       out.println("Scheduling Name: " + result.schedulingName);
       out.println("Simulation Run Time: " + result.compuTime);
+      out.println("Avarage Turn Around Time: " + result.avgtt);
+      out.println("Avarage Waiting Time: " + result.avgwt);
       out.println("Mean: " + meanDev);
       out.println("Standard Deviation: " + standardDev);
       out.println("Process #\tCPU Time\tIO Blocking\tCPU Completed\tCPU Blocked");

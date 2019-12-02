@@ -5,8 +5,8 @@
 package scheduling_simulator.algo;
 
 import scheduling_simulator.utils.ProcessInfoPrinter;
-import scheduling_simulator.utils.Results;
-import scheduling_simulator.utils.sProcess;
+import scheduling_simulator.utils.process.sProcess;
+import scheduling_simulator.utils.results.Results;
 
 import java.util.Vector;
 import java.io.*;
@@ -55,9 +55,14 @@ public class SchedulingAlgorithm {
           takeNewProcess = false;
           if (curProcess.cpudone == curProcess.cputime) {
             ProcessInfoPrinter.print(out, curProcess, ProcessInfoPrinter.Status.Completed);
-            scheduler.markCompletedOne(curProcess);
+            scheduler.markCompletedOne(curProcess, compTime);
+            result.avgtt += curProcess.tt;
+            result.avgwt += curProcess.wt;
+
             if (scheduler.isEmpty()) {
               result.compuTime = compTime;
+              result.avgwt /= processVector.size();
+              result.avgtt /= processVector.size();
               out.close();
               return result;
             }
@@ -82,6 +87,8 @@ public class SchedulingAlgorithm {
       out.close();
     } catch (IOException e) { /* Handle exceptions */ }
     result.compuTime = compTime;
+    result.avgwt /= processVector.size();
+    result.avgtt /= processVector.size();
     return result;
   }
 }

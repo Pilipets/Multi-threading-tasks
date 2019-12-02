@@ -1,5 +1,7 @@
 package scheduling_simulator.utils;
 
+import scheduling_simulator.utils.process.sProcess;
+
 import java.io.PrintStream;
 import java.util.Vector;
 
