@@ -30,7 +30,6 @@ public class HRRNScheduler {
     }
     public void markCompletedOne(sProcess p){
         completedTasks += 1;
-        pVec.remove(p);
     }
     public boolean isEmpty(){
         return completedTasks == numTasks;
@@ -51,7 +50,7 @@ public class HRRNScheduler {
     public sProcess getNextProcess(int compTime){
         float hrr = Integer.MIN_VALUE;
         for(sProcess p: pVec){
-            if(p.arrivalTime <= compTime && p != curProcess){
+            if(p.arrivalTime <= compTime && p != curProcess && p.cpudone != p.cputime){
                 float temp = (p.cputime + compTime - p.arrivalTime)/(float)p.cputime;
                 p.responseRatio = temp;
                 if(hrr < temp){
