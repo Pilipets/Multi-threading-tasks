@@ -37,7 +37,7 @@ public class SchedulingAlgorithm {
     result.schedulingType = "Batch (Nonpreemptive)";
     result.schedulingName = "Guaranteed Scheduling";
 
-    HRRNScheduler scheduler = new HRRNScheduler(processVector, runTime);
+    HRRNScheduler scheduler = new HRRNScheduler(processVector);
     int compTime = 0;
     try {
       PrintStream out = new PrintStream(new FileOutputStream(resultsFile));

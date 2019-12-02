@@ -9,23 +9,21 @@ import java.util.Vector;
 public class HRRNScheduler {
     private Vector<sProcess> pVec;
     private int numTasks;
-    private int maxTime;
     private int completedTasks = 0;
     private sProcess curProcess = null;
 
-    public HRRNScheduler(Vector<sProcess> processVector, int maxTime){
+    public HRRNScheduler(Vector<sProcess> processVector){
         this.pVec = processVector;
         this.numTasks = processVector.size();
-        this.maxTime = maxTime;
         init();
     }
     private void init(){
         Collections.sort(pVec, new Comparator<sProcess>() {
-                    @Override
-                    public int compare(sProcess p1, sProcess p2) {
-                        return Integer.compare(p1.arrivalTime, p2.arrivalTime);
-                    }
-                }
+            @Override
+            public int compare(sProcess p1, sProcess p2) {
+                return Integer.compare(p1.arrivalTime, p2.arrivalTime);
+            }
+        }
         );
     }
     public void markCompletedOne(sProcess p){
@@ -42,7 +40,6 @@ public class HRRNScheduler {
         p.cpudone += 1;
         if(p.ioblocking > 0)
             p.ionext += 1;
-
     }
     public Vector<sProcess> getTasks(){
         return pVec;
