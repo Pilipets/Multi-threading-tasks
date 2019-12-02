@@ -12,26 +12,6 @@ import java.util.Vector;
 import java.io.*;
 
 public class SchedulingAlgorithm {
-  public static int NextTimePoint(HRRNScheduler scheduler){
-    Vector<sProcess> pVec = scheduler.getTasks();
-
-    int min_time = Integer.MAX_VALUE;
-    for(sProcess p: pVec){
-      min_time = Math.min(p.cputime-p.cputime, min_time);
-      min_time = Math.min(p.ioblocking-p.ionext, min_time);
-    }
-    return min_time;
-  }
-  public static int GetNextArrivalPoint(HRRNScheduler scheduler){
-    Vector<sProcess> pVec = scheduler.getTasks();
-
-    int min_at = Integer.MAX_VALUE;
-    for(sProcess p: pVec){
-      if(p.arrivalTime < min_at)
-        min_at = p.arrivalTime;
-    }
-    return min_at;
-  }
   public static Results Run(int runTime, Vector processVector, Results result) {
     String resultsFile = "result_data/Summary-Processes";
     result.schedulingType = "Batch (Nonpreemptive)";
