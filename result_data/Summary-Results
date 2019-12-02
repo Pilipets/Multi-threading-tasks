@@ -1,8 +1,6 @@
 Scheduling Type: Batch (Nonpreemptive)
 Scheduling Name: Guaranteed Scheduling
-Simulation Run Time: 5000
+Simulation Run Time: 4588
 Mean: 1100
 Standard Deviation: 510
 Process #	CPU Time	IO Blocking	CPU Completed	CPU Blocked
-0		1585 (ms)	30 (ms)		510 (ms)	17 times
-1		1585 (ms)	250 (ms)	1320 (ms)	5 times

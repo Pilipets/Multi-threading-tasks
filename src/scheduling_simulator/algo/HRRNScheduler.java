@@ -43,6 +43,10 @@ public class HRRNScheduler {
         p.cpudone += 1;
         if(p.ioblocking > 0)
             p.ionext += 1;
+
+    }
+    public Vector<sProcess> getTasks(){
+        return pVec;
     }
     public sProcess getNextProcess(int compTime){
         float hrr = Integer.MIN_VALUE;
