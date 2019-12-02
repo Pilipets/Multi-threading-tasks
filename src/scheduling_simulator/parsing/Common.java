@@ -1,4 +1,4 @@
-package scheduling_simulator;
+package scheduling_simulator.parsing;
 
 public class Common {
 

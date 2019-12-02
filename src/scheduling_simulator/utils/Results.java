@@ -1,4 +1,4 @@
-package scheduling_simulator;
+package scheduling_simulator.utils;
 
 public class Results {
   public String schedulingType;

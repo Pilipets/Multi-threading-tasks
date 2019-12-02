@@ -9,6 +9,11 @@
 
 package scheduling_simulator;
 
+import scheduling_simulator.algo.SchedulingAlgorithm;
+import scheduling_simulator.parsing.Common;
+import scheduling_simulator.utils.Results;
+import scheduling_simulator.utils.sProcess;
+
 import java.io.*;
 import java.util.*;
 
@@ -122,7 +127,7 @@ public class Scheduling {
         i++;
       }
     }
-    result = SchedulingAlgorithm.Run(runtime, processVector, result);    
+    result = SchedulingAlgorithm.Run(runtime, processVector, result);
     try {
       //BufferedWriter out = new BufferedWriter(new FileWriter(resultsFile));
       PrintStream out = new PrintStream(new FileOutputStream(resultsFile));
