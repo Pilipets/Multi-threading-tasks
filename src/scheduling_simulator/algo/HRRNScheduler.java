@@ -2,6 +2,8 @@ package scheduling_simulator.algo;
 
 import scheduling_simulator.utils.sProcess;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Vector;
 
 public class HRRNScheduler {
@@ -16,14 +18,21 @@ public class HRRNScheduler {
         this.pVec = processVector;
         this.numTasks = processVector.size();
         this.maxTime = maxTime;
-        init(processVector);
+        init();
     }
-    private void init(Vector<sProcess> processVector){
-        //construct heap from Processes
+    private void init(){
+        Collections.sort(pVec, new Comparator<sProcess>() {
+                    @Override
+                    public int compare(sProcess p1, sProcess p2) {
+                        return p1.compareTo(p2);
+                    }
+                }
+        );
     }
     public void markCompletedOne(sProcess p){
         completedTasks += 1;
-        // deleteNode(p)
+        pVec.remove(p);
+        curProcess = null;
     }
     public boolean isEmpty(){
         return completedTasks == numTasks;
@@ -31,8 +40,6 @@ public class HRRNScheduler {
     public void markBlockedOne(sProcess p){
         p.ionext = 0;
         p.numblocked += 1;
-        p.updateResponseRatio(numTasks,compTime);
-        // updateNode(p)
     }
     public void updateRunning(sProcess p){
         p.cpudone += 1;
@@ -42,14 +49,23 @@ public class HRRNScheduler {
     }
     public sProcess getNextProcess(){
         if(curProcess == null){
-            //Find curProcess, nextProcess
+            curProcess = pVec.get(0);
+            if(pVec.size() > 1)
+                nextProcess = pVec.get(1);
         }
         else{
             curProcess.updateResponseRatio(numTasks, compTime);
             if(curProcess.compareTo(nextProcess) == 1){
-                // UpdateHeap(curProcess)
-                // curProcess = nextProcess
-                // Find nextProcess
+                Collections.sort(pVec, new Comparator<sProcess>() {
+                            @Override
+                            public int compare(sProcess p1, sProcess p2) {
+                                return p1.compareTo(p2);
+                            }
+                        }
+                );
+                curProcess = pVec.get(0);
+                if(pVec.size() > 1)
+                    nextProcess = pVec.get(1);
             }
         }
         return curProcess;

@@ -14,7 +14,7 @@ import java.io.*;
 public class SchedulingAlgorithm {
 
   public static Results Run(int runTime, Vector processVector, Results result) {
-    String resultsFile = "Summary-Processes";
+    String resultsFile = "result_data/Summary-Processes";
     result.schedulingType = "Batch (Nonpreemptive)";
     result.schedulingName = "Guaranteed Scheduling";
 

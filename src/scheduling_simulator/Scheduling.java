@@ -65,8 +65,8 @@ public class Scheduling {
           X = X * standardDev;
           readProcess.cputime = (int) X + meanDev;
           //processVector.addElement(new sProcess(cputime, ioblocking, 0, 0, 0));
-          processVector.addElement(new sProcess(readProcess.cputime, readProcess.ioblocking, 0, 0, 0,
-                  readProcess.arrivalTime));
+          processVector.addElement(new sProcess(readProcess.cputime,
+                  readProcess.ioblocking, readProcess.arrivalTime));
         }
         if (line.startsWith("runtime")) {
           StringTokenizer st = new StringTokenizer(line);
@@ -123,7 +123,7 @@ public class Scheduling {
           }
           X = X * standardDev;
         int cputime = (int) X + meanDev;
-        processVector.addElement(new sProcess(cputime,i*100,0,0,0));          
+        processVector.addElement(new sProcess(cputime,i*100,0,0,0));
         i++;
       }
     }

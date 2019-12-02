@@ -11,11 +11,15 @@ public class ProcessInfoPrinter {
         switch (s){
             case Blocked:
                 out.print("I/O blocked... ");
+                break;
             case Completed:
                 out.print("completed... ");
+                break;
             case Registered:
                 out.print("registered... ");
+                break;
         }
-        out.println(String.format("(%d %d %d)",p.cputime, p.ioblocking, p.cpudone));
+        out.println(String.format("(cpuTime=%d ioBlocking=%d cpuDone=%d ratio=%f)",
+                p.cputime, p.ioblocking, p.cpudone, p.responseRatio));
     }
 }

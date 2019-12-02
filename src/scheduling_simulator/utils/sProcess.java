@@ -1,17 +1,15 @@
 package scheduling_simulator.utils;
 
 public class sProcess implements Comparable{
+  private static int counter = 0;
   public int cputime;
   public int ioblocking;
-  public int cpudone;
-  public int ionext;
-  public int numblocked;
-  public int completed;
-  public int arrivalTime;
-  public int blocked;
+  public int cpudone = 0;
+  public int ionext = 0;
+  public int numblocked = 0;
+  public int arrivalTime = 0;
+  public float responseRatio = 0;
   public int id;
-  private float responseRatio;
-  private static int counter = 0;
   public sProcess(){
 
   }
@@ -21,15 +19,12 @@ public class sProcess implements Comparable{
     this.cpudone = cpudone;
     this.ionext = ionext;
     this.numblocked = numblocked;
-    this.completed = 0;
-    this.arrivalTime = 0;
     this.id = counter++;
   }
-  public sProcess (int cputime, int ioblocking, int cpudone, int ionext,
-                   int numblocked, int arrivalTime) {
-    this(cputime, ioblocking, cpudone, ionext, numblocked);
+  public sProcess (int cputime, int ioblocking, int arrivalTime) {
+    this.cputime = cputime;
+    this.ioblocking = ioblocking;
     this.arrivalTime = arrivalTime;
-    this.responseRatio = 0;
   }
   public void updateResponseRatio(int numTasks, int compTime){
     this.responseRatio = this.cpudone*(float)numTasks/(compTime-this.arrivalTime);
@@ -37,6 +32,17 @@ public class sProcess implements Comparable{
   @Override
   public int compareTo(Object o) {
     sProcess other = (sProcess)o;
-    return Float.compare(this.responseRatio, other.responseRatio);
+    if(this.responseRatio <= 0 && other.responseRatio <= 0){
+      return 0;
+    }
+    else if(this.responseRatio > 0 && other.responseRatio > 0) {
+      return Float.compare(this.responseRatio, other.responseRatio);
+    }
+    else if(this.responseRatio <= 0) {
+      return -1;
+    }
+    else if(other.responseRatio <= 0) {
+      return 1;
+    }
   }
 }
