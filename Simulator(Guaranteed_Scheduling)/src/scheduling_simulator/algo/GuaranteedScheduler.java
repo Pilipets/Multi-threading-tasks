@@ -1,11 +1,8 @@
 package scheduling_simulator.algo;
 
-import scheduling_simulator.utils.ProcessInfoPrinter;
 import scheduling_simulator.utils.process.sProcess;
 
-import java.security.KeyPair;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Vector;
 
 public class GuaranteedScheduler {
@@ -14,13 +11,24 @@ public class GuaranteedScheduler {
     private int completedTasks = 0;
     private sProcess curProcess = null, nextProcess = null;
 
+    private sProcess setProperProcess(sProcess prev){
+        sProcess temp = null;
+        for(int i = 0; i < pVec.size(); ++i){
+            temp = pVec.get(i);
+            if(temp.responseRatio == Integer.MAX_VALUE)
+                temp = null;
+            if(temp != prev)
+                break;
+        }
+        return temp;
+    }
     private void updateProcessesOrder(int compTime){
         for(sProcess p: pVec){
             p.updateResponseRatio(numTasks, compTime);
         }
         Collections.sort(pVec, (p1, p2) -> p1.compareTo(p2));
-        curProcess = pVec.size() > 0 && pVec.get(0).responseRatio < Integer.MAX_VALUE ? pVec.get(0) : null;
-        nextProcess = pVec.size() > 1 && pVec.get(1).responseRatio < Integer.MAX_VALUE? pVec.get(1) : null;
+        curProcess = this.setProperProcess(curProcess);
+        nextProcess = this.setProperProcess(curProcess);
     }
     public GuaranteedScheduler(Vector<sProcess> processVector){
         this.pVec = new Vector<>(processVector);
