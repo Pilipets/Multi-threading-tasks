@@ -246,7 +246,7 @@ public class Kernel extends Thread
                     tmp = st.nextToken();
                     if (tmp.startsWith("random"))
                     {
-                        instructVector.addElement(new Instruction(command,Common.randomLong( address_limit )));
+                        instructVector.addElement(new Instruction(command, Common.randomLong( address_limit )));
                     }
                     else
                     {
@@ -319,7 +319,7 @@ public class Kernel extends Thread
                 if ( page.physical == -1 && map_count < ( virtPageNum + 1 ) / 2 )
                 {
                     page.physical = i;
-                    cache.put(id, id);
+                    cache.put(i, i);
                     map_count++;
                 }
             }

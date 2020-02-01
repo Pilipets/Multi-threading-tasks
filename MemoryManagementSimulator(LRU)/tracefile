@@ -1,1 +1,45 @@
 READ 2050 ... page fault
+WRITE 2700 ... page fault
+WRITE 2807 ... page fault
+WRITE 2800 ... okay
+WRITE 4000 ... page fault
+READ 2200 ... page fault
+READ 3500 ... page fault
+READ 500 ... okay
+WRITE 900 ... okay
+WRITE 1665 ... okay
+WRITE 1372 ... okay
+READ 120 ... page fault
+READ 2138 ... page fault
+WRITE 2138 ... okay
+READ 2138 ... okay
+WRITE 2138 ... okay
+WRITE 2138 ... okay
+READ 1254 ... okay
+READ 1169 ... okay
+WRITE 773 ... okay
+READ 2313 ... page fault
+WRITE 1673 ... okay
+WRITE 1773 ... okay
+READ 3755 ... page fault
+READ 3353 ... page fault
+WRITE 3760 ... okay
+READ 2644 ... page fault
+WRITE 524 ... page fault
+WRITE 579 ... page fault
+READ 3655 ... page fault
+READ 93 ... okay
+WRITE 3907 ... page fault
+READ 3907 ... okay
+WRITE 3907 ... okay
+WRITE 3907 ... okay
+READ 3907 ... okay
+READ 3907 ... okay
+WRITE 3907 ... okay
+READ 3056 ... page fault
+WRITE 3056 ... okay
+WRITE 3025 ... okay
+READ 2227 ... okay
+READ 3308 ... page fault
+WRITE 3651 ... okay
+READ 3813 ... page fault
